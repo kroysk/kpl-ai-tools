@@ -1,0 +1,19 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.swp
+*~
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+
+# Logs / local
+*.log
+.idea/
+.vscode/
+!.vscode/extensions.json
+
+# Explore outputs are ignored under out/ (see out/.gitignore)

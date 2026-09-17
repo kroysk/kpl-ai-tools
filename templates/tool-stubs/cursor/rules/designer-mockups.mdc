@@ -1,0 +1,6 @@
+﻿---
+description: UI features need designer-brief and mockups folder before polishing UI
+alwaysApply: false
+---
+
+After PRD+specs for UI: `designer-brief.md`; images in `mockups/`. Implement UI from mockups or explicit brief-only approval. See `agents/rules/designer-mockups.md` and skill `write-designer-brief`.

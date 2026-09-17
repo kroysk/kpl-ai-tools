@@ -1,0 +1,33 @@
+---
+description: KPL SDD control plane — cycle, branches, token protocol, mentor, ladder
+alwaysApply: true
+---
+
+# kpl-core
+
+Follow `AGENTS.md`. Product memory in `specs/`; agent canon in `agents/`.
+
+## Token protocol
+
+1. One skill (`agents/skills/<name>/` or `.cursor/skills/<name>/` — same body)
+2. `memory/INDEX.md` → max 1–2 cards
+3. Only current `specs/features/<id>/` files needed
+4. STANDARDS + pragmatic ladder — don't paste into chat
+
+## Cycle
+
+Discover → PRD → specs+tasks → designer brief → mockups → branch → implement → security → publish
+
+## Branches
+
+Never on `main`. Prefixes: `feature/` | `fix/` | `chore/`
+
+## Architecture mentor
+
+On design or non-trivial implement: **Pattern / Why here / Tradeoff / Not doing**. Prefer boring. Ladder before layers.
+
+Load skill `architecture-mentor` when crossing modules, auth, data ownership, trust boundaries, or writing an ADR.
+
+## Skills
+
+Discover by description under `.cursor/skills/`. Index: `specs/SKILLS.md`. Full practices: `agents/rules/`.

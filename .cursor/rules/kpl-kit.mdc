@@ -1,0 +1,11 @@
+﻿---
+description: kpl-ai-tools kit entry — explore then init
+alwaysApply: true
+---
+
+# kpl-ai-tools
+
+This repo is the workflow **kit**. Follow root `AGENTS.md`.
+
+Primary skills: `kpl-project-explore`, `kpl-sdd-init` (under `.cursor/skills/`).
+Do not run the product SDD cycle here unless installing into a separate target.

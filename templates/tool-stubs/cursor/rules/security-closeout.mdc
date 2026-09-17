@@ -1,0 +1,6 @@
+﻿---
+description: API/security closeout — defensive security-review.md when API tasks done
+alwaysApply: false
+---
+
+When API-touching `T-*` are done, write `security-review.md` (defensive findings only — no exploits/PoCs). Open critical/high → remediation tasks. Follow `agents/rules/security-closeout.md` and skill `security-review-api`.
