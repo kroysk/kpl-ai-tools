@@ -9,6 +9,7 @@ Bodies: `agents/skills/<name>/SKILL.md` (synced into `.cursor` / `.claude` / `.o
 | write-feature-spec | PRD approved | Coding before specs ready |
 | write-designer-brief | UI handoff | API-only; pixels before brief |
 | implement-from-spec | Ready specs + branch ≠ main | Coding on main |
+| bulk-read | Large-file I/O / understand without editing | Patches, debug, architecture, security |
 | sdd-quality-gate | Before human approval | Writing the docs themselves |
 | security-review-api | API closeout | Exploits / PoCs |
 | security-review-front | UI closeout | Replacing API review |

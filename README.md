@@ -97,6 +97,36 @@ Scripts: [`scripts/install.sh`](scripts/install.sh) · [`scripts/install.ps1`](s
 
 ---
 
+## Update an existing project
+
+When this kit ships new skills, rules, or token-I/O hooks, refresh a project that **already** has the control plane. Preserves `specs/features/**`, `stack.md`, `CONTROL_PLANE`, `stack-hooks`, memory cards, and `opencode.json`.
+
+### Windows (PowerShell)
+
+From a local kit clone:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File C:\path\to\kpl-ai-tools\scripts\install.ps1 -Refresh C:\path\to\your-project
+```
+
+Or from GitHub (in your project folder), set the kit ref then download and run with `-Refresh` after saving the script locally — prefer the local-clone form above so `-Refresh` is unambiguous.
+
+### Linux / macOS
+
+```bash
+/path/to/kpl-ai-tools/scripts/install.sh --refresh /path/to/your-project
+```
+
+### With the agent
+
+Open **this kit** and ask:
+
+```text
+Refresh the SDD control plane in ../my-app (kpl-sdd-refresh).
+```
+
+---
+
 ## Quick start (explore → init with the agent)
 
 Prefer the agent when you want an explore report before install:
@@ -122,15 +152,19 @@ Explore the project at ../my-app (kpl-project-explore).
 Explore approved. Init the SDD workflow into ../my-app (kpl-sdd-init).
 ```
 
+```text
+Refresh the SDD control plane in ../my-app (kpl-sdd-refresh).
+```
+
 ---
 
 ## What you get
 
-- **13 product skills** — discovery, PRD, specs/tasks, designer brief, implement-from-spec, quality gate, security reviews, git branch, publish, memory, endpoint access, **architecture mentor**
+- **14 product skills** — discovery, PRD, specs/tasks, designer brief, implement-from-spec, quality gate, security reviews, git branch, publish, memory, endpoint access, **architecture mentor**, **bulk-read**
 - **Architecture mentor** — Pattern / Why / Tradeoff / Not doing; pattern catalog + review checklist; escalates on real boundaries
-- **Practices** — pragmatic ladder, Clean/SOLID, SDD cycle, git branches, memory protocol, security closeout, designer mockups
+- **Practices** — pragmatic ladder, Clean/SOLID, SDD cycle, git branches, memory protocol, security closeout, designer mockups, token I/O
 - **Templates** — `AGENTS.md`, `agents/`, `specs/`, `memory/`, ready for any language/framework
-- **Token-light protocol** — INDEX + max 1–2 memory cards; don’t dump the whole specs tree into context
+- **Token-light protocol** — INDEX + max 1–2 memory cards; don’t dump the whole specs tree; large product files go through `bulk-read` + hooks (default 500 lines)
 
 ---
 
@@ -173,9 +207,12 @@ Trivial bugs can skip the full cycle. Scope changes edit the PRD first. See [`PR
 | [AGENTS.md](AGENTS.md) / [CLAUDE.md](CLAUDE.md) | Kit entry for the three tools |
 | [practices/](practices/) | Agnostic practice docs (upstream for `agents/rules`) |
 | [templates/](templates/) | Files init copies into targets |
-| [skills/](skills/) | Explore + init (mirrored to `.cursor` / `.claude` / `.opencode`) |
+| [skills/](skills/) | Explore + init + refresh (mirrored to `.cursor` / `.claude` / `.opencode`) |
 | [scripts/sync-tool-skills.ps1](scripts/sync-tool-skills.ps1) | Sync canon skills → tool packs |
-| [scripts/install.sh](scripts/install.sh) / [install.ps1](scripts/install.ps1) | Install control plane from GitHub / local kit |
+| [scripts/merge-kpl-io-hooks.ps1](scripts/merge-kpl-io-hooks.ps1) / [merge-kpl-io-hooks.sh](scripts/merge-kpl-io-hooks.sh) | Merge token-I/O hooks into Cursor/Claude config |
+| [scripts/test-kpl-io-policy.ps1](scripts/test-kpl-io-policy.ps1) | Allow/deny + merge-safe checks for token I/O |
+| [scripts/test-kpl-refresh.ps1](scripts/test-kpl-refresh.ps1) | Refresh preserve/update checks |
+| [scripts/install.sh](scripts/install.sh) / [install.ps1](scripts/install.ps1) | Install or `-Refresh` / `--refresh` control plane from GitHub / local kit |
 | [out/](out/) | Explore reports (gitignored contents) |
 
 ---
@@ -186,7 +223,7 @@ Trivial bugs can skip the full cycle. Scope changes edit the PRD first. See [`PR
 2. Open the kit or the target project in your AI tool
 3. Or run explore → init for a guided setup
 
-Nothing changes in a target until you run **`install.sh` / `install.ps1`** or **`kpl-sdd-init`**.
+Nothing changes in a target until you run **`install.sh` / `install.ps1`**, **`kpl-sdd-init`**, or **`kpl-sdd-refresh`**.
 
 ---
 

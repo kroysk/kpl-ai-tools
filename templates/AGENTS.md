@@ -12,6 +12,7 @@ This repo root holds **product memory** (`specs/`) and **agent canon** (`agents/
 2. Skim `memory/INDEX.md` → open max **1–2** cards
 3. Load only the current `specs/features/<id>/` files you need
 4. Apply STANDARDS + pragmatic-ladder; don't paste them into chat
+5. Product files ≥500 lines: `Grep` or `Read` with `offset`/`limit`; if a hook blocks a full Read, load skill `bulk-read` (`agents/rules/token-io.md`)
 
 ## Cycle
 

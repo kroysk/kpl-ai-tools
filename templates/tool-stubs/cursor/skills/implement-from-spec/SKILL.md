@@ -31,4 +31,4 @@ description: >-
 
 - Never develop on main.
 - Server enforces access; UI hide is not security.
-- Token protocol: don't dump all specs into context.
+- Token protocol: don't dump all specs into context. Large product files → skill `bulk-read` (understand); targeted `Read` before you edit.

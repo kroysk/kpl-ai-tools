@@ -18,9 +18,10 @@ Kit root = parent of `skills/` (this package). Templates = `templates/`.
 ## Merge-safe rules
 
 - **Never delete** existing `specs/features/**`
-- If `agents/` or `specs/` exist: overwrite only scaffold files listed below unless user says `refresh-all` (still skip features/)
+- If the target **already has** a control plane and the user wants kit updates: stop and use skill **`kpl-sdd-refresh`** (installers `-Refresh` / `--refresh`) instead of re-running this init
 - Don't touch application source (`src/`, `app/`, etc.)
 - For `.opencode/opencode.json`: copy from templates **only if missing** (do not overwrite user config)
+- For `.cursor/hooks.json` and `.claude/settings.json`: **merge** KPL token-I/O hooks (run kit `scripts/merge-kpl-io-hooks.ps1` or `.sh`); never replace the whole file
 
 ## Install steps
 
@@ -28,13 +29,14 @@ Kit root = parent of `skills/` (this package). Templates = `templates/`.
 2. If `templates/agents/skills` was edited recently, run `scripts/sync-tool-skills.ps1` from kit root so tool packs match canon.
 3. Copy from `templates/` into target:
    - `AGENTS.md`, `CLAUDE.md`
-   - `agents/` (README, STANDARDS, ARCHITECTURE, CONTROL_PLANE, rules/, skills/ — full skill bodies + mentor refs)
+   - `agents/` (README, STANDARDS, ARCHITECTURE, CONTROL_PLANE, rules/, skills/, hooks/, `io-policy.json` — full skill bodies + mentor refs)
    - `specs/` (README, SKILLS, stack.md, contract/, _templates/)
    - `memory/` (INDEX + example card + `_template-adr.md`)
    - Tool packs → target `.cursor/`, `.claude/`, `.opencode/` from `templates/tool-stubs/*`
      - Skills are **full copies** (not pointers): `.cursor/skills`, `.claude/skills`, `.opencode/skills`
      - Cursor rules: `kpl-core.mdc` (+ optional closeout/access/mockups)
-     - OpenCode: `opencode.json` only if target lacks one
+     - OpenCode: `opencode.json` only if target lacks one; always merge `.opencode/plugins/`
+     - Token I/O: `agents/io-policy.json` + `agents/hooks/` copy with `agents/`; then run kit `scripts/merge-kpl-io-hooks.ps1` (Windows) or `scripts/merge-kpl-io-hooks.sh` (Unix) against the target
 4. **Adapt**:
    - Fill `specs/stack.md` from explore
    - Fill `agents/CONTROL_PLANE.md` paths
@@ -49,6 +51,7 @@ Kit root = parent of `skills/` (this package). Templates = `templates/`.
    - [ ] specs/_templates + SKILLS.md
    - [ ] memory/INDEX (+ ADR template)
    - [ ] `.cursor` / `.claude` / `.opencode` skill packs
+   - [ ] Token-io hooks on (`.cursor/hooks.json` merged, `.claude/settings.json` merged, `.opencode/plugins/kpl-bulk-read.js`)
    - [ ] Customize architecture-mentor **stack-hooks** for this framework next
 
 ## After init
