@@ -117,8 +117,14 @@ merge_dir "$TEMPLATES/tool-stubs/cursor" "$TARGET/.cursor"
 merge_dir "$TEMPLATES/tool-stubs/claude" "$TARGET/.claude"
 mkdir -p "$TARGET/.opencode"
 merge_dir "$TEMPLATES/tool-stubs/opencode/skills" "$TARGET/.opencode/skills"
+if [[ -d "$TEMPLATES/tool-stubs/opencode/plugins" ]]; then
+  merge_dir "$TEMPLATES/tool-stubs/opencode/plugins" "$TARGET/.opencode/plugins"
+fi
 if [[ -f "$TEMPLATES/tool-stubs/opencode/opencode.json" && ! -f "$TARGET/.opencode/opencode.json" ]]; then
   cp -f "$TEMPLATES/tool-stubs/opencode/opencode.json" "$TARGET/.opencode/opencode.json"
+fi
+if [[ -f "$KIT_ROOT/scripts/merge-kpl-io-hooks.sh" ]]; then
+  bash "$KIT_ROOT/scripts/merge-kpl-io-hooks.sh" "$TARGET"
 fi
 
 # Optional practices reference

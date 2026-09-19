@@ -12,4 +12,5 @@ Follow [AGENTS.md](AGENTS.md).
 Cycle: Discover → PRD → specs+tasks → designer → branch → implement → security → publish.  
 Branches: never on `main` (`feature/` | `fix/` | `chore/`).  
 Mentor: Pattern / Why / Tradeoff / Not doing; load `architecture-mentor` for non-trivial boundaries.  
-Ladder before layers. Token-light: one skill + 1–2 memory cards + current feature package only.
+Ladder before layers. Token-light: one skill + 1–2 memory cards + current feature package only.  
+Product files ≥500 lines: Grep or Read with offset/limit; hook blocks → skill `bulk-read`.

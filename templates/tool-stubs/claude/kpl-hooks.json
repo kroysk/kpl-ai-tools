@@ -1,0 +1,25 @@
+{
+  "comment": "Fragment. install/merge-kpl-io-hooks merges PreToolUse into settings.json; never replace the file.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "KPL_HOOK_CMD"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "KPL_HOOK_CMD"
+          }
+        ]
+      }
+    ]
+  }
+}

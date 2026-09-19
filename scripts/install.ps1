@@ -102,10 +102,19 @@ Merge-Dir (Join-Path $Templates "tool-stubs\claude") (Join-Path $Target ".claude
 $opencode = Join-Path $Target ".opencode"
 New-Item -ItemType Directory -Path $opencode -Force | Out-Null
 Merge-Dir (Join-Path $Templates "tool-stubs\opencode\skills") (Join-Path $opencode "skills")
+$ocPlugins = Join-Path $Templates "tool-stubs\opencode\plugins"
+if (Test-Path $ocPlugins) {
+    Merge-Dir $ocPlugins (Join-Path $opencode "plugins")
+}
 $ocJsonSrc = Join-Path $Templates "tool-stubs\opencode\opencode.json"
 $ocJsonDest = Join-Path $opencode "opencode.json"
 if ((Test-Path $ocJsonSrc) -and -not (Test-Path $ocJsonDest)) {
     Copy-Item -Force $ocJsonSrc $ocJsonDest
+}
+
+$mergeHooks = Join-Path $KitRoot "scripts\merge-kpl-io-hooks.ps1"
+if (Test-Path $mergeHooks) {
+    & $mergeHooks -Target $Target
 }
 
 $practices = Join-Path $KitRoot "practices"

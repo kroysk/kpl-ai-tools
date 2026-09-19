@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "comment": "Fragment. install/merge-kpl-io-hooks injects these; do not copy as the whole hooks.json.",
+  "hooks": {
+    "preToolUse": [
+      {
+        "command": "KPL_HOOK_CMD",
+        "matcher": "Read"
+      }
+    ],
+    "beforeReadFile": [
+      {
+        "command": "KPL_HOOK_CMD"
+      }
+    ],
+    "beforeShellExecution": [
+      {
+        "command": "KPL_HOOK_CMD"
+      }
+    ]
+  }
+}

@@ -21,6 +21,14 @@ Do **not** maintain separate “pointer stubs” — tool folders must match can
 - Source of truth for practice text: kit `practices/` → keep `agents/rules/` aligned (do not diverge).
 - Cursor always-on: `kpl-core.mdc` (inline). Claude/OpenCode rely on `AGENTS.md` / `CLAUDE.md` (they do not load a `.rules` folder as skills).
 
+## Token I/O
+
+- Policy: `io-policy.json` (default 500 lines; `KPL_READ_MIN_LINES=0` disables)
+- Practice/rule: `token-io`
+- Skill: `bulk-read`
+- Hook scripts: `hooks/kpl-check-read.ps1` + `.sh` — init **merges** them into Cursor/Claude config
+- OpenCode: `.opencode/plugins/kpl-bulk-read.js` (not this folder)
+
 ## See also
 
 - `STANDARDS.md`, `ARCHITECTURE.md`, `CONTROL_PLANE.md`

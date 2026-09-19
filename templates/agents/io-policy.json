@@ -1,0 +1,7 @@
+{
+  "minLines": 500,
+  "envOverride": "KPL_READ_MIN_LINES",
+  "bashWide": ["cat", "head", "tail", "less", "more"],
+  "narrowPipe": ["grep", "rg", "findstr", "awk", "sed"],
+  "denyMessage": "File exceeds the KPL read threshold (default 500 lines). Load skill bulk-read. Use Grep or Read with offset/limit. Do not cat or Read the whole file. After the summary, Read only the span you will edit."
+}

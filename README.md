@@ -126,11 +126,11 @@ Explore approved. Init the SDD workflow into ../my-app (kpl-sdd-init).
 
 ## What you get
 
-- **13 product skills** — discovery, PRD, specs/tasks, designer brief, implement-from-spec, quality gate, security reviews, git branch, publish, memory, endpoint access, **architecture mentor**
+- **14 product skills** — discovery, PRD, specs/tasks, designer brief, implement-from-spec, quality gate, security reviews, git branch, publish, memory, endpoint access, **architecture mentor**, **bulk-read**
 - **Architecture mentor** — Pattern / Why / Tradeoff / Not doing; pattern catalog + review checklist; escalates on real boundaries
-- **Practices** — pragmatic ladder, Clean/SOLID, SDD cycle, git branches, memory protocol, security closeout, designer mockups
+- **Practices** — pragmatic ladder, Clean/SOLID, SDD cycle, git branches, memory protocol, security closeout, designer mockups, token I/O
 - **Templates** — `AGENTS.md`, `agents/`, `specs/`, `memory/`, ready for any language/framework
-- **Token-light protocol** — INDEX + max 1–2 memory cards; don’t dump the whole specs tree into context
+- **Token-light protocol** — INDEX + max 1–2 memory cards; don’t dump the whole specs tree; large product files go through `bulk-read` + hooks (default 500 lines)
 
 ---
 
@@ -175,6 +175,8 @@ Trivial bugs can skip the full cycle. Scope changes edit the PRD first. See [`PR
 | [templates/](templates/) | Files init copies into targets |
 | [skills/](skills/) | Explore + init (mirrored to `.cursor` / `.claude` / `.opencode`) |
 | [scripts/sync-tool-skills.ps1](scripts/sync-tool-skills.ps1) | Sync canon skills → tool packs |
+| [scripts/merge-kpl-io-hooks.ps1](scripts/merge-kpl-io-hooks.ps1) / [merge-kpl-io-hooks.sh](scripts/merge-kpl-io-hooks.sh) | Merge token-I/O hooks into Cursor/Claude config |
+| [scripts/test-kpl-io-policy.ps1](scripts/test-kpl-io-policy.ps1) | Allow/deny + merge-safe checks for token I/O |
 | [scripts/install.sh](scripts/install.sh) / [install.ps1](scripts/install.ps1) | Install control plane from GitHub / local kit |
 | [out/](out/) | Explore reports (gitignored contents) |
 

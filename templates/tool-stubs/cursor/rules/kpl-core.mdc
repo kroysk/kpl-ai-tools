@@ -13,6 +13,7 @@ Follow `AGENTS.md`. Product memory in `specs/`; agent canon in `agents/`.
 2. `memory/INDEX.md` → max 1–2 cards
 3. Only current `specs/features/<id>/` files needed
 4. STANDARDS + pragmatic ladder — don't paste into chat
+5. Product files ≥500 lines: Grep or Read with offset/limit; hook blocks → skill `bulk-read`
 
 ## Cycle
 
