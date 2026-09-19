@@ -14,7 +14,7 @@ Thanks for helping make **kpl-ai-tools** easier to use across Cursor, Claude Cod
 | --- | --- | --- |
 | Product skills (after init) | `templates/agents/skills/<name>/` | Run sync (below) |
 | Practices / always-on rules | `practices/` **and** matching `templates/agents/rules/` | Keep them aligned |
-| Kit entry skills | `skills/kpl-project-explore`, `skills/kpl-sdd-init` | Mirror into `.cursor/skills/`, `.claude/skills/`, `.opencode/skills/` |
+| Kit entry skills | `skills/kpl-project-explore`, `skills/kpl-sdd-init`, `skills/kpl-sdd-refresh` | Mirror into `.cursor/skills/`, `.claude/skills/`, `.opencode/skills/` |
 | Target always-on docs | `templates/AGENTS.md`, `templates/CLAUDE.md` | — |
 | Token I/O policy / hook scripts | `practices/token-io.md` **and** `templates/agents/rules/token-io.md`; scripts in `templates/agents/hooks/` | Keep practice + rule aligned |
 | Token I/O tool adapters | `templates/tool-stubs/<tool>/` (Cursor/Claude `kpl-hooks.json` fragments, OpenCode `plugins/`) | Not synced by `sync-tool-skills.ps1` — edit each adapter; merge via `scripts/merge-kpl-io-hooks.*` |
@@ -31,7 +31,7 @@ This copies `templates/agents/skills/*` → `templates/tool-stubs/{cursor,claude
 
 ### Install scripts
 
-End-user installers live in `scripts/install.sh` (Linux/macOS) and `scripts/install.ps1` (Windows). Keep merge-safe behavior aligned with `skills/kpl-sdd-init/SKILL.md` (preserve `specs/features/**`, skip overwriting `.opencode/opencode.json`, merge token-I/O hooks into existing `.cursor/hooks.json` / `.claude/settings.json`, no app source). After changing hook scripts or `io-policy.json`, run `scripts/test-kpl-io-policy.ps1`.
+End-user installers live in `scripts/install.sh` (Linux/macOS) and `scripts/install.ps1` (Windows). Keep merge-safe behavior aligned with `skills/kpl-sdd-init/SKILL.md` and refresh preserve rules with `skills/kpl-sdd-refresh/SKILL.md` (preserve `specs/features/**`, `stack.md`, `CONTROL_PLANE`, `stack-hooks`, memory cards; skip overwriting `.opencode/opencode.json`; merge token-I/O hooks into existing `.cursor/hooks.json` / `.claude/settings.json`; no app source). After changing hook scripts or `io-policy.json`, run `scripts/test-kpl-io-policy.ps1`. After changing refresh preserve/update lists, run `scripts/test-kpl-refresh.ps1`.
 
 ## Pull requests
 

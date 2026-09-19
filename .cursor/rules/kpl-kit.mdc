@@ -7,5 +7,5 @@ alwaysApply: true
 
 This repo is the workflow **kit**. Follow root `AGENTS.md`.
 
-Primary skills: `kpl-project-explore`, `kpl-sdd-init` (under `.cursor/skills/`).
+Primary skills: `kpl-project-explore`, `kpl-sdd-init`, `kpl-sdd-refresh` (under `.cursor/skills/`).
 Do not run the product SDD cycle here unless installing into a separate target.

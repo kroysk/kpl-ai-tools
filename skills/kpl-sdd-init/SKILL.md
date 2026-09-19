@@ -18,7 +18,7 @@ Kit root = parent of `skills/` (this package). Templates = `templates/`.
 ## Merge-safe rules
 
 - **Never delete** existing `specs/features/**`
-- If `agents/` or `specs/` exist: overwrite only scaffold files listed below unless user says `refresh-all` (still skip features/)
+- If the target **already has** a control plane and the user wants kit updates: stop and use skill **`kpl-sdd-refresh`** (installers `-Refresh` / `--refresh`) instead of re-running this init
 - Don't touch application source (`src/`, `app/`, etc.)
 - For `.opencode/opencode.json`: copy from templates **only if missing** (do not overwrite user config)
 - For `.cursor/hooks.json` and `.claude/settings.json`: **merge** KPL token-I/O hooks (run kit `scripts/merge-kpl-io-hooks.ps1` or `.sh`); never replace the whole file

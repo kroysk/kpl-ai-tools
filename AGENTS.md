@@ -6,12 +6,13 @@ This repository is the **portable SDD/AI workflow kit**, not a product app.
 
 1. Load skill **`kpl-project-explore`** — explore a target project (readonly) → `out/explore-<slug>.md`
 2. After human approval, load **`kpl-sdd-init`** — install templates into the target root
+3. When the kit changes and a target already has the control plane, load **`kpl-sdd-refresh`** (or `install.ps1 -Refresh` / `install.sh --refresh`)
 
 ## Paths
 
 | Need | Path |
 | --- | --- |
-| Kit skills (canon) | `skills/kpl-project-explore`, `skills/kpl-sdd-init` |
+| Kit skills (canon) | `skills/kpl-project-explore`, `skills/kpl-sdd-init`, `skills/kpl-sdd-refresh` |
 | Same skills (tool discovery) | `.cursor/skills/`, `.claude/skills/`, `.opencode/skills/` |
 | Practices (upstream) | `practices/` |
 | Install templates | `templates/` |
