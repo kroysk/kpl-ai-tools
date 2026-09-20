@@ -33,7 +33,9 @@ description: >-
 ### → Closed
 
 - [ ] T-* done or explicitly deferred
-- [ ] `security-review.md` if API touched; critical/high remediated or tasked
+- [ ] `security-review.md` if API or trust boundary touched
+- [ ] Scope section present; each `confirmed` has evidence `path:line`
+- [ ] Confirmed critical/high remediated or tasked (`T-*`); `needs_validation` neither silent pass nor automatic fail
 - [ ] `publish.md` optional
 
 ## Output

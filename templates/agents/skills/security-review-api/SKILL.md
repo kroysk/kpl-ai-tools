@@ -17,13 +17,23 @@ description: >-
 
 ## Steps
 
-1. Skim PRD/spec endpoints + access matrix + changed API files.
-2. Write `specs/features/<id>/security-review.md`:
-   - Table `S-001…`: severity | area | finding | remediation | status
+1. Seed **Scope** from the endpoint-access matrix + changed API/trust-boundary files for this feature. If the feature touches LLM/tools/MCP, include that boundary in Scope.
+2. If `security-review.md` already exists, revalidate any `S-*` whose evidence paths changed; do not rewrite blindly.
+3. Write/update `specs/features/<id>/security-review.md` from the template:
+   - Scope (surfaces, out of scope, source_ref)
+   - Table `S-001…`: kind | severity | area | boundary | evidence (`path:line`) | finding | smallest fix | status
    - Verdict: `pass` | `pass_with_findings` | `fail`
-3. Open critical/high → new remediation tasks in `tasks.md` (do not silently pass).
-4. **Defensive only** — describe how to harden; never provide exploit steps, payloads, or attack scripts.
+4. For each `confirmed` critical/high: re-read cited `path:line` and try to disprove (other control? really hardening?). Downgrade if it does not hold.
+5. Open critical/high confirmed → new remediation `T-*` in `tasks.md` with a concrete file (do not silently pass).
+6. **Defensive only** — describe what the code allows and how to harden; never provide exploit steps, payloads, or attack scripts.
 
 ## Focus areas (checklist, not exploits)
 
 Authn/z on every route, input validation, injection classes at data edge, secrets handling, error leakage, IDOR / object-level auth, rate limits if relevant to stack.
+
+## Anti-patterns
+
+- Checklist deviation ≠ vulnerability; severity requires demonstrated impact.
+- Do not guess deploy/CDN/IdP behavior → `needs_validation` with exact blocker.
+- UI hide ≠ server enforce.
+- `fail` only when confirmed critical/high lacks a remediation task.
