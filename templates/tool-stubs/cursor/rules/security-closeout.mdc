@@ -3,4 +3,4 @@ description: API/security closeout — defensive security-review.md when API tas
 alwaysApply: false
 ---
 
-When API-touching `T-*` are done, write `security-review.md` (defensive findings only — no exploits/PoCs). Open critical/high → remediation tasks. Follow `agents/rules/security-closeout.md` and skill `security-review-api`.
+When API-touching (or trust-boundary) `T-*` are done, write `security-review.md` from the template (Scope + kinds + evidence `path:line` — no exploits/PoCs). Confirmed critical/high → remediation tasks. `needs_validation` is neither silent pass nor automatic fail. Follow `agents/rules/security-closeout.md` and skill `security-review-api`.

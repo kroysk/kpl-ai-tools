@@ -13,4 +13,4 @@ Discover → PRD → specs+tasks → designer brief → mockups → branch → i
 - → PRD: goal, Done when, access if HTTP, gate PASS, approved
 - → Specs: PRD approved, FR/AC, tasks.md
 - → Code: ready specs + branch ≠ main
-- → Closed: T-* done + security-review when API touched + publish optional
+- → Closed: T-* done + security-review (Scope + evidence) when API/trust boundary touched + publish optional
