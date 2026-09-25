@@ -4,7 +4,8 @@ description: >-
   Starts a feature with discovery.md under specs/features/<id>/. Clarifies goal,
   actor, layers, access, and open questions; waits for human approval before PRD.
   Use when: vague idea, new feature, discovery, kickoff, explore a product idea.
-  Not for: implementing code, writing PRD before discovery approved, or trivial bugs.
+  Not for: implementing code, writing PRD before discovery approved, or fix-path bugs
+  (known files, no new capability/FR/trust boundary — use git-branch fix/ instead).
 ---
 
 # feature-discovery
@@ -13,6 +14,7 @@ description: >-
 
 - Control plane present (`AGENTS.md`, `specs/`).
 - User has a feature idea (may be vague). Ask ≤8 clarifying questions if needed.
+- If the request already fits **fix path** (`agents/rules/sdd-cycle.md`): stop; hand off to `git-branch` with `fix/`. Do not open discovery.
 
 ## Steps
 

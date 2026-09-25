@@ -66,6 +66,15 @@ try {
     # Contract README customized
     Set-Content -LiteralPath (Join-Path $target "specs\contract\README.md") -Value "# Contract`nCUSTOM_CONTRACT" -Encoding utf8
 
+    # AGENTS.md: mark inside kpl:user (must survive) and outside (must not)
+    $userMarker = "CUSTOM_USER_BLOCK_KEEP"
+    $outsideMarker = "CUSTOM_OUTSIDE_MUST_DIE"
+    $agentsPath = Join-Path $target "AGENTS.md"
+    $agentsText = Get-Content -LiteralPath $agentsPath -Raw -Encoding UTF8
+    $agentsText = $agentsText -replace '(?s)(<!-- kpl:user:start -->).*?(<!-- kpl:user:end -->)', "`$1`n$userMarker`n`$2"
+    $agentsText = $agentsText -replace '(## Skills)', "$outsideMarker`n`n`$1"
+    Set-Content -LiteralPath $agentsPath -Value $agentsText -Encoding utf8 -NoNewline
+
     # Refresh
     & (Join-Path $KitRoot "scripts\install.ps1") -Refresh -Target $target
 
@@ -79,11 +88,21 @@ try {
     Assert-True ((Get-Content (Join-Path $target ".opencode\opencode.json") -Raw) -match $ocMarker) "opencode.json preserved"
     Assert-True ((Get-Content (Join-Path $target "specs\contract\README.md") -Raw) -match "CUSTOM_CONTRACT") "contract README preserved"
 
+    $agentsAfter = Get-Content $agentsPath -Raw -Encoding UTF8
+    Assert-True ($agentsAfter -match $userMarker) "AGENTS.md kpl:user interior preserved"
+    Assert-True ($agentsAfter -notmatch $outsideMarker) "AGENTS.md text outside kpl:user replaced"
+
+    $kitStamp = Get-Content (Join-Path $target "agents\kpl-kit.json") -Raw -Encoding UTF8 | ConvertFrom-Json
+    Assert-True ($kitStamp.mode -eq "refresh") "kpl-kit.json mode is refresh"
+    Assert-True (-not [string]::IsNullOrWhiteSpace([string]$kitStamp.ref)) "kpl-kit.json has ref"
+
     $bootText = Get-Content $boot -Raw
     Assert-True ($bootText -match $bootMarker) "bootstrap original kept"
     Assert-True ($bootText -match "Refreshed") "bootstrap append Refreshed"
 
     Assert-True (Test-Path (Join-Path $target "agents\skills\bulk-read\SKILL.md")) "bulk-read skill present after refresh"
+    Assert-True (Test-Path (Join-Path $target "agents\skills\kpl-doctor\SKILL.md")) "kpl-doctor skill present after refresh"
+    Assert-True (Test-Path (Join-Path $target "agents\skills\sdd-onboard\SKILL.md")) "sdd-onboard skill present after refresh"
     Assert-True (Test-Path (Join-Path $target "agents\io-policy.json")) "io-policy present after refresh"
     Assert-True (Test-Path (Join-Path $target ".opencode\plugins\kpl-bulk-read.js")) "opencode plugin present"
 

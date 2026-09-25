@@ -18,6 +18,8 @@ This repo root holds **product memory** (`specs/`) and **agent canon** (`agents/
 
 Discover → PRD → specs+tasks → designer brief → mockups → branch → implement → security → publish
 
+**Fix path** (all four): known files, no new capability, no new FR, no new trust boundary → `fix/` branch + implement (skip discovery/PRD). Diff size does not choose the path. **Feature path** otherwise. Scope change: edit PRD first. See `agents/rules/sdd-cycle.md`.
+
 ## Branches
 
 Never code on `main`. Prefixes: `feature/` | `fix/` | `chore/`
@@ -31,3 +33,7 @@ Escalate — load skill `architecture-mentor` when the change crosses modules, a
 ## Skills
 
 See `specs/SKILLS.md`. Canon: `agents/skills/`. Tool folders mirror the same files for discovery.
+
+<!-- kpl:user:start -->
+<!-- Project notes. Refresh keeps this block. -->
+<!-- kpl:user:end -->

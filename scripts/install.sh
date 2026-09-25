@@ -90,6 +90,50 @@ restore_file() {
   printf '%s' "$content" >"$path"
 }
 
+extract_kpl_user_interior() {
+  # Print text between kpl:user markers (exclusive). Empty if markers missing.
+  local file="$1"
+  [[ -f "$file" ]] || return 0
+  awk '
+    /<!-- kpl:user:start -->/ { flag=1; next }
+    /<!-- kpl:user:end -->/ { flag=0; next }
+    flag { print }
+  ' "$file"
+}
+
+write_agents_preserving_user() {
+  local template="$1"
+  local dest="$2"
+  local interior_file="$3"
+  if [[ -n "$interior_file" && -f "$interior_file" ]]; then
+    awk -v interior_file="$interior_file" '
+      /<!-- kpl:user:start -->/ {
+        print
+        while ((getline line < interior_file) > 0) print line
+        close(interior_file)
+        skip=1
+        next
+      }
+      /<!-- kpl:user:end -->/ { skip=0 }
+      !skip { print }
+    ' "$template" >"$dest"
+  else
+    cp -f "$template" "$dest"
+  fi
+}
+
+write_kpl_kit_json() {
+  local agents_dir="$1"
+  local repo="$2"
+  local ref="$3"
+  local installed_at="$4"
+  local mode="$5"
+  mkdir -p "$agents_dir"
+  cat >"$agents_dir/kpl-kit.json" <<EOF
+{"kit":"kpl-ai-tools","repo":"$repo","ref":"$ref","installedAt":"$installed_at","mode":"$mode"}
+EOF
+}
+
 merge_memory_refresh() {
   local src="$1" dest="$2"
   mkdir -p "$dest/cards"
@@ -159,22 +203,41 @@ BAK_HOOK_AGENTS=""
 BAK_HOOK_CURSOR=""
 BAK_HOOK_CLAUDE=""
 BAK_HOOK_OPENCODE=""
+USER_INTERIOR_FILE=""
+USER_BLOCK_WARN=0
 if [[ "$REFRESH" -eq 1 ]]; then
   BAK_CONTROL="$(backup_file "$TARGET/agents/CONTROL_PLANE.md" || true)"
   BAK_HOOK_AGENTS="$(backup_file "$TARGET/agents/skills/architecture-mentor/stack-hooks.md" || true)"
   BAK_HOOK_CURSOR="$(backup_file "$TARGET/.cursor/skills/architecture-mentor/stack-hooks.md" || true)"
   BAK_HOOK_CLAUDE="$(backup_file "$TARGET/.claude/skills/architecture-mentor/stack-hooks.md" || true)"
   BAK_HOOK_OPENCODE="$(backup_file "$TARGET/.opencode/skills/architecture-mentor/stack-hooks.md" || true)"
+  if [[ -f "$TARGET/AGENTS.md" ]]; then
+    if grep -q 'kpl:user:start' "$TARGET/AGENTS.md"; then
+      USER_INTERIOR_FILE="$(mktemp "${TMPDIR:-/tmp}/kpl-user.XXXXXX")"
+      extract_kpl_user_interior "$TARGET/AGENTS.md" >"$USER_INTERIOR_FILE"
+    else
+      USER_BLOCK_WARN=1
+    fi
+  fi
 fi
 
 # Root entry docs
-cp -f "$TEMPLATES/AGENTS.md" "$TARGET/AGENTS.md"
+write_agents_preserving_user "$TEMPLATES/AGENTS.md" "$TARGET/AGENTS.md" "$USER_INTERIOR_FILE"
+if [[ "$USER_BLOCK_WARN" -eq 1 ]]; then
+  echo "    warning: AGENTS.md had no kpl:user markers; replaced with kit template (notes outside the block were not preserved)"
+fi
+[[ -n "$USER_INTERIOR_FILE" ]] && rm -f "$USER_INTERIOR_FILE"
 cp -f "$TEMPLATES/CLAUDE.md" "$TARGET/CLAUDE.md"
 
 merge_dir "$TEMPLATES/agents" "$TARGET/agents"
 if [[ "$REFRESH" -eq 1 && -n "$BAK_CONTROL" ]]; then
   restore_file "$TARGET/agents/CONTROL_PLANE.md" "$BAK_CONTROL"
 fi
+
+DATE="$(date +%Y-%m-%d)"
+STAMP_MODE="init"
+[[ "$REFRESH" -eq 1 ]] && STAMP_MODE="refresh"
+write_kpl_kit_json "$TARGET/agents" "$KPL_REPO_URL" "$KPL_REF" "$DATE" "$STAMP_MODE"
 
 mkdir -p "$TARGET/specs"
 for item in README.md SKILLS.md; do
@@ -208,7 +271,6 @@ fi
 merge_dir "$TEMPLATES/specs/_templates" "$TARGET/specs/_templates"
 
 mkdir -p "$TARGET/specs/features/_bootstrap"
-DATE="$(date +%Y-%m-%d)"
 BOOTSTRAP="$TARGET/specs/features/_bootstrap/README.md"
 if [[ "$REFRESH" -eq 1 && -f "$BOOTSTRAP" ]]; then
   {
@@ -279,13 +341,13 @@ echo "  $TARGET"
 echo
 if [[ "$REFRESH" -eq 1 ]]; then
   echo "Preserved: specs/features/**, stack.md, contract/README.md, CONTROL_PLANE,"
-  echo "  stack-hooks.md, memory INDEX/cards, opencode.json; hooks merged."
-  echo "Updated: AGENTS/CLAUDE, agents skills/rules/hooks, tool skill packs, token-io."
+  echo "  stack-hooks.md, memory INDEX/cards, opencode.json, AGENTS.md kpl:user block; hooks merged."
+  echo "Updated: AGENTS/CLAUDE (canon), agents skills/rules/hooks, kpl-kit.json, tool skill packs, token-io."
 else
   echo "Next:"
   echo "  1. Open this project in Cursor / Claude Code / OpenCode"
   echo "  2. Fill specs/stack.md for your stack"
-  echo "  3. Start with skill: feature-discovery"
+  echo "  3. Start with skill: feature-discovery (or sdd-onboard)"
 fi
 echo
 echo "Did not modify application source (src/, app/, etc.)."

@@ -31,7 +31,7 @@ This copies `templates/agents/skills/*` → `templates/tool-stubs/{cursor,claude
 
 ### Install scripts
 
-End-user installers live in `scripts/install.sh` (Linux/macOS) and `scripts/install.ps1` (Windows). Keep merge-safe behavior aligned with `skills/kpl-sdd-init/SKILL.md` and refresh preserve rules with `skills/kpl-sdd-refresh/SKILL.md` (preserve `specs/features/**`, `stack.md`, `CONTROL_PLANE`, `stack-hooks`, memory cards; skip overwriting `.opencode/opencode.json`; merge token-I/O hooks into existing `.cursor/hooks.json` / `.claude/settings.json`; no app source). After changing hook scripts or `io-policy.json`, run `scripts/test-kpl-io-policy.ps1`. After changing refresh preserve/update lists, run `scripts/test-kpl-refresh.ps1`.
+End-user installers live in `scripts/install.sh` (Linux/macOS) and `scripts/install.ps1` (Windows). Keep merge-safe behavior aligned with `skills/kpl-sdd-init/SKILL.md` and refresh preserve rules with `skills/kpl-sdd-refresh/SKILL.md` (preserve `specs/features/**`, `stack.md`, `CONTROL_PLANE`, `stack-hooks`, memory cards; skip overwriting `.opencode/opencode.json`; merge token-I/O hooks into existing `.cursor/hooks.json` / `.claude/settings.json`; no app source). After changing hook scripts or `io-policy.json`, run `scripts/test-kpl-io-policy.ps1`. After changing refresh preserve/update lists, run `scripts/test-kpl-refresh.ps1`. After changing doctor checks, run `scripts/test-kpl-doctor.ps1`.
 
 ## Pull requests
 

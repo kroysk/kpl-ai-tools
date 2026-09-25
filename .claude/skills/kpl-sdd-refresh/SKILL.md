@@ -27,10 +27,12 @@ Kit root = parent of `skills/` (this package). Runs the installers in **refresh*
 - `memory/INDEX.md` and existing `memory/cards/**`
 - `.opencode/opencode.json`
 - Existing Cursor/Claude hook entries (token-io hooks are **merged**)
+- Interior of `AGENTS.md` between `<!-- kpl:user:start -->` and `<!-- kpl:user:end -->` (installers reinsert after copying the template)
 
 ## Update from kit
 
-- `AGENTS.md`, `CLAUDE.md`
+- `AGENTS.md` (canon outside `kpl:user`), `CLAUDE.md`
+- `agents/kpl-kit.json` (ref, installedAt, mode=`refresh`)
 - `agents/` skills, rules, hooks, `io-policy.json`, STANDARDS, practices
 - `specs/README.md`, `specs/SKILLS.md`, `specs/_templates/`
 - `.cursor/skills` + `.cursor/rules/*.mdc`
@@ -49,8 +51,11 @@ Kit root = parent of `skills/` (this package). Runs the installers in **refresh*
    - [ ] Token-io hooks merged
    - [ ] `specs/features/**` untouched
    - [ ] `stack.md` / `CONTROL_PLANE` / `stack-hooks` preserved
+   - [ ] `AGENTS.md` `kpl:user` block preserved (or warned if markers were missing)
+   - [ ] `agents/kpl-kit.json` has `mode: refresh`
    - [ ] Bootstrap has a new Refreshed section
-4. Tell user to reopen the project (or reload) so tools pick up new skills/hooks.
+4. Optional: run `scripts/kpl-doctor.ps1` / `kpl-doctor.sh` on the target.
+5. Tell user to reopen the project (or reload) so tools pick up new skills/hooks.
 
 ## Do not
 

@@ -41,19 +41,25 @@ Kit root = parent of `skills/` (this package). Templates = `templates/`.
    - Fill `specs/stack.md` from explore
    - Fill `agents/CONTROL_PLANE.md` paths
    - Seed `specs/contract/README.md` with known routes if any (else empty table + gap)
-   - Adjust `AGENTS.md` wording to project name
+   - Put the project name (and any project-only notes) **inside** the `<!-- kpl:user:start -->` … `<!-- kpl:user:end -->` block in `AGENTS.md` — do not rewrite the kit canon above that block
    - Optionally fill `agents/skills/architecture-mentor/stack-hooks.md` from stack
-5. Optionally copy `practices/` into `agents/practices/` for reference (rules already carry the practice text).
-6. Write short `specs/features/_bootstrap/README.md` noting init date + explore file used.
-7. Report checklist to user:
-   - [ ] AGENTS.md + CLAUDE.md present
+5. Write `agents/kpl-kit.json`:
+   ```json
+   { "kit": "kpl-ai-tools", "repo": "<kit repo url or local path>", "ref": "<branch/tag>", "installedAt": "YYYY-MM-DD", "mode": "init" }
+   ```
+6. Optionally copy `practices/` into `agents/practices/` for reference (rules already carry the practice text).
+7. Write short `specs/features/_bootstrap/README.md` noting init date + explore file used.
+8. Report checklist to user:
+   - [ ] AGENTS.md + CLAUDE.md present (with `kpl:user` markers)
+   - [ ] `agents/kpl-kit.json` written
    - [ ] agents/skills (real procedures) + rules
    - [ ] specs/_templates + SKILLS.md
    - [ ] memory/INDEX (+ ADR template)
    - [ ] `.cursor` / `.claude` / `.opencode` skill packs
    - [ ] Token-io hooks on (`.cursor/hooks.json` merged, `.claude/settings.json` merged, `.opencode/plugins/kpl-bulk-read.js`)
    - [ ] Customize architecture-mentor **stack-hooks** for this framework next
+   - [ ] Optional: run `kpl-doctor` on the target
 
 ## After init
 
-User works with feature-discovery → … → publish using installed skills. Keep this kit around for future projects; no need to modify the target’s app code from init alone.
+User works with `sdd-onboard` or `feature-discovery` → … → publish using installed skills. Keep this kit around for future projects; no need to modify the target’s app code from init alone.

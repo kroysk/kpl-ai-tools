@@ -160,7 +160,7 @@ Refresh the SDD control plane in ../my-app (kpl-sdd-refresh).
 
 ## What you get
 
-- **14 product skills** — discovery, PRD, specs/tasks, designer brief, implement-from-spec, quality gate, security reviews, git branch, publish, memory, endpoint access, **architecture mentor**, **bulk-read**
+- **16 product skills** — discovery, PRD, specs/tasks, designer brief, implement-from-spec, quality gate, security reviews, git branch, publish, memory, endpoint access, **architecture mentor**, **bulk-read**, **kpl-doctor**, **sdd-onboard**
 - **Architecture mentor** — Pattern / Why / Tradeoff / Not doing; pattern catalog + review checklist; escalates on real boundaries
 - **Practices** — pragmatic ladder, Clean/SOLID, SDD cycle, git branches, memory protocol, security closeout, designer mockups, token I/O
 - **Templates** — `AGENTS.md`, `agents/`, `specs/`, `memory/`, ready for any language/framework
@@ -212,7 +212,9 @@ Trivial bugs can skip the full cycle. Scope changes edit the PRD first. See [`PR
 | [scripts/merge-kpl-io-hooks.ps1](scripts/merge-kpl-io-hooks.ps1) / [merge-kpl-io-hooks.sh](scripts/merge-kpl-io-hooks.sh) | Merge token-I/O hooks into Cursor/Claude config |
 | [scripts/test-kpl-io-policy.ps1](scripts/test-kpl-io-policy.ps1) | Allow/deny + merge-safe checks for token I/O |
 | [scripts/test-kpl-refresh.ps1](scripts/test-kpl-refresh.ps1) | Refresh preserve/update checks |
+| [scripts/test-kpl-doctor.ps1](scripts/test-kpl-doctor.ps1) | Doctor PASS/WARN/FAIL checks |
 | [scripts/install.sh](scripts/install.sh) / [install.ps1](scripts/install.ps1) | Install or `-Refresh` / `--refresh` control plane from GitHub / local kit |
+| [scripts/kpl-doctor.sh](scripts/kpl-doctor.sh) / [kpl-doctor.ps1](scripts/kpl-doctor.ps1) | Read-only health check of an installed control plane |
 | [out/](out/) | Explore reports (gitignored contents) |
 
 ---

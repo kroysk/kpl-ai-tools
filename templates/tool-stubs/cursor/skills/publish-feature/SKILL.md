@@ -11,6 +11,7 @@ description: >-
 ## Preconditions
 
 - Work is on `feature/` | `fix/` | `chore/` (not main).
+- Closed gate PASS from `sdd-quality-gate` (each confirmed AC has `path:line` or test name), **or** user explicitly overrides.
 - API features: security-review done or explicitly deferred by user.
 
 ## Steps

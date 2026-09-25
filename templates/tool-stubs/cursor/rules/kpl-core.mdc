@@ -19,6 +19,8 @@ Follow `AGENTS.md`. Product memory in `specs/`; agent canon in `agents/`.
 
 Discover → PRD → specs+tasks → designer brief → mockups → branch → implement → security → publish
 
+**Fix path** (all four): known files, no new capability, no new FR, no new trust boundary → `fix/` + implement. Diff size does not choose. **Feature path** otherwise. Scope change: edit PRD first.
+
 ## Branches
 
 Never on `main`. Prefixes: `feature/` | `fix/` | `chore/`

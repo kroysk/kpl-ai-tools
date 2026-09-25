@@ -57,6 +57,38 @@ function Restore-IfBacked([string]$Path, $Content) {
     Set-Content -LiteralPath $Path -Value $Content -Encoding utf8 -NoNewline
 }
 
+function Get-KplUserInterior([string]$Content) {
+    if ([string]::IsNullOrEmpty($Content)) { return $null }
+    $m = [regex]::Match($Content, '(?s)<!-- kpl:user:start -->(.*?)<!-- kpl:user:end -->')
+    if ($m.Success) { return $m.Groups[1].Value }
+    return $null
+}
+
+function Write-AgentsPreservingUserBlock([string]$TemplatePath, [string]$DestPath, [string]$UserInterior) {
+    $tpl = Get-Content -LiteralPath $TemplatePath -Raw -Encoding UTF8
+    if ($null -ne $UserInterior) {
+        $tpl = [regex]::Replace(
+            $tpl,
+            '(?s)<!-- kpl:user:start -->.*?<!-- kpl:user:end -->',
+            "<!-- kpl:user:start -->$UserInterior<!-- kpl:user:end -->"
+        )
+    }
+    Set-Content -LiteralPath $DestPath -Value $tpl -Encoding utf8 -NoNewline
+}
+
+function Write-KplKitJson([string]$AgentsDir, [string]$Repo, [string]$RefName, [string]$InstalledAt, [string]$Mode) {
+    New-Item -ItemType Directory -Path $AgentsDir -Force | Out-Null
+    $obj = [ordered]@{
+        kit         = "kpl-ai-tools"
+        repo        = $Repo
+        ref         = $RefName
+        installedAt = $InstalledAt
+        mode        = $Mode
+    }
+    $json = ($obj | ConvertTo-Json -Compress)
+    Set-Content -LiteralPath (Join-Path $AgentsDir "kpl-kit.json") -Value $json -Encoding utf8
+}
+
 function Merge-MemoryRefresh([string]$Src, [string]$Dest) {
     # Refresh: add missing template ADR only; never overwrite INDEX or existing cards.
     New-Item -ItemType Directory -Path (Join-Path $Dest "cards") -Force | Out-Null
@@ -148,6 +180,8 @@ if (-not (Test-Path (Join-Path $Templates "agents"))) {
 # Backup preserve paths before agents/skill merges (refresh only)
 $bakControl = $null
 $bakStackHooks = @{}
+$userInterior = $null
+$userBlockWarn = $false
 if ($Refresh) {
     $bakControl = Backup-IfExists (Join-Path $Target "agents\CONTROL_PLANE.md")
     $hookPaths = @(
@@ -159,9 +193,20 @@ if ($Refresh) {
     foreach ($hp in $hookPaths) {
         $bakStackHooks[$hp] = Backup-IfExists $hp
     }
+    $existingAgents = Backup-IfExists (Join-Path $Target "AGENTS.md")
+    $userInterior = Get-KplUserInterior $existingAgents
+    if ($null -eq $userInterior -and $null -ne $existingAgents) {
+        $userBlockWarn = $true
+    }
 }
 
-Copy-Item -Force (Join-Path $Templates "AGENTS.md") (Join-Path $Target "AGENTS.md")
+Write-AgentsPreservingUserBlock `
+    (Join-Path $Templates "AGENTS.md") `
+    (Join-Path $Target "AGENTS.md") `
+    $userInterior
+if ($userBlockWarn) {
+    Write-Host "    warning: AGENTS.md had no kpl:user markers; replaced with kit template (notes outside the block were not preserved)"
+}
 Copy-Item -Force (Join-Path $Templates "CLAUDE.md") (Join-Path $Target "CLAUDE.md")
 
 Merge-Dir (Join-Path $Templates "agents") (Join-Path $Target "agents")
@@ -169,6 +214,10 @@ Merge-Dir (Join-Path $Templates "agents") (Join-Path $Target "agents")
 if ($Refresh -and $null -ne $bakControl) {
     Restore-IfBacked (Join-Path $Target "agents\CONTROL_PLANE.md") $bakControl
 }
+
+$date = Get-Date -Format "yyyy-MM-dd"
+$stampMode = if ($Refresh) { "refresh" } else { "init" }
+Write-KplKitJson (Join-Path $Target "agents") $RepoUrl $Ref $date $stampMode
 
 $specs = Join-Path $Target "specs"
 New-Item -ItemType Directory -Path $specs -Force | Out-Null
@@ -213,7 +262,6 @@ Merge-Dir (Join-Path $Templates "specs\_templates") (Join-Path $specs "_template
 $bootstrap = Join-Path $specs "features\_bootstrap"
 New-Item -ItemType Directory -Path $bootstrap -Force | Out-Null
 $bootstrapReadme = Join-Path $bootstrap "README.md"
-$date = Get-Date -Format "yyyy-MM-dd"
 if ($Refresh -and (Test-Path $bootstrapReadme)) {
     $append = @"
 
@@ -294,13 +342,13 @@ Write-Host "  $Target"
 Write-Host ""
 if ($Refresh) {
     Write-Host "Preserved: specs/features/**, stack.md, contract/README.md, CONTROL_PLANE,"
-    Write-Host "  stack-hooks.md, memory INDEX/cards, opencode.json; hooks merged."
-    Write-Host "Updated: AGENTS/CLAUDE, agents skills/rules/hooks, tool skill packs, token-io."
+    Write-Host "  stack-hooks.md, memory INDEX/cards, opencode.json, AGENTS.md kpl:user block; hooks merged."
+    Write-Host "Updated: AGENTS/CLAUDE (canon), agents skills/rules/hooks, kpl-kit.json, tool skill packs, token-io."
 } else {
     Write-Host "Next:"
     Write-Host "  1. Open this project in Cursor / Claude Code / OpenCode"
     Write-Host "  2. Fill specs/stack.md for your stack"
-    Write-Host "  3. Start with skill: feature-discovery"
+    Write-Host "  3. Start with skill: feature-discovery (or sdd-onboard)"
 }
 Write-Host ""
 Write-Host "Did not modify application source (src/, app/, etc.)."

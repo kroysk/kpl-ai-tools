@@ -10,6 +10,7 @@ Follow [AGENTS.md](AGENTS.md).
 ## Always-on
 
 Cycle: Discover → PRD → specs+tasks → designer → branch → implement → security → publish.  
+Fix path (known files, no new capability/FR/trust boundary) → `fix/` + implement; else full cycle. Diff size does not choose.  
 Branches: never on `main` (`feature/` | `fix/` | `chore/`).  
 Mentor: Pattern / Why / Tradeoff / Not doing; load `architecture-mentor` for non-trivial boundaries.  
 Ladder before layers. Token-light: one skill + 1–2 memory cards + current feature package only.  
