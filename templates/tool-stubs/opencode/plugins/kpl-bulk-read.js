@@ -11,7 +11,7 @@ function loadPolicy(root) {
     denyMessage:
       "File exceeds the KPL read threshold (default 500 lines). Load skill bulk-read. Use Grep or Read with offset/limit. Do not cat or Read the whole file. After the summary, Read only the span you will edit.",
   }
-  const path = join(root, "agents", "io-policy.json")
+  const path = join(root, ".kpl", "agents", "io-policy.json")
   if (!existsSync(path)) return defaults
   try {
     return { ...defaults, ...JSON.parse(readFileSync(path, "utf8")) }
