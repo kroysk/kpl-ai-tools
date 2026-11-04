@@ -19,41 +19,41 @@ echo "    target: $TARGET"
 echo
 
 # kpl-kit.json
-KIT_JSON="$TARGET/agents/kpl-kit.json"
+KIT_JSON="$TARGET/.kpl/agents/kpl-kit.json"
 if [[ ! -f "$KIT_JSON" ]]; then
-  fail "missing agents/kpl-kit.json"
+  fail "missing .kpl/agents/kpl-kit.json"
 else
   for field in kit repo ref installedAt; do
     if ! grep -q "\"$field\"" "$KIT_JSON"; then
-      fail "agents/kpl-kit.json missing or empty field: $field"
+      fail ".kpl/agents/kpl-kit.json missing or empty field: $field"
     fi
   done
 fi
 
 [[ -f "$TARGET/AGENTS.md" ]] || fail "missing AGENTS.md"
-[[ -d "$TARGET/agents" ]] || fail "missing agents/"
-[[ -f "$TARGET/specs/SKILLS.md" ]] || fail "missing specs/SKILLS.md"
-[[ -f "$TARGET/memory/INDEX.md" ]] || fail "missing memory/INDEX.md"
+[[ -d "$TARGET/.kpl/agents" ]] || fail "missing .kpl/agents/"
+[[ -f "$TARGET/.kpl/specs/SKILLS.md" ]] || fail "missing .kpl/specs/SKILLS.md"
+[[ -f "$TARGET/.kpl/memory/INDEX.md" ]] || fail "missing .kpl/memory/INDEX.md"
 
-if [[ ! -f "$TARGET/specs/stack.md" ]]; then
-  fail "missing specs/stack.md"
+if [[ ! -f "$TARGET/.kpl/specs/stack.md" ]]; then
+  fail "missing .kpl/specs/stack.md"
 else
-  if grep -qiE 'Filled by.?kpl-sdd-init|^# Stack$' "$TARGET/specs/stack.md" 2>/dev/null; then
+  if grep -qiE 'Filled by.?kpl-sdd-init|^# Stack$' "$TARGET/.kpl/specs/stack.md" 2>/dev/null; then
     # Heuristic: short/template-like content
-    lines="$(wc -l <"$TARGET/specs/stack.md" | tr -d ' ')"
-    if [[ "$lines" -lt 5 ]] || grep -qi 'Filled by' "$TARGET/specs/stack.md"; then
-      warn "specs/stack.md still looks like the unfilled template"
+    lines="$(wc -l <"$TARGET/.kpl/specs/stack.md" | tr -d ' ')"
+    if [[ "$lines" -lt 5 ]] || grep -qi 'Filled by' "$TARGET/.kpl/specs/stack.md"; then
+      warn ".kpl/specs/stack.md still looks like the unfilled template"
     fi
   fi
 fi
 
-if [[ -f "$TARGET/specs/SKILLS.md" ]]; then
+if [[ -f "$TARGET/.kpl/specs/SKILLS.md" ]]; then
   while IFS= read -r name; do
     [[ -z "$name" || "$name" == "Skill" || "$name" =~ ^-+$ ]] && continue
-    if [[ ! -f "$TARGET/agents/skills/$name/SKILL.md" ]]; then
-      fail "skill listed in SKILLS.md but missing: agents/skills/$name/SKILL.md"
+    if [[ ! -f "$TARGET/.kpl/agents/skills/$name/SKILL.md" ]]; then
+      fail "skill listed in SKILLS.md but missing: .kpl/agents/skills/$name/SKILL.md"
     fi
-  done < <(awk -F'|' '/^\|[[:space:]]*[a-z0-9-]+[[:space:]]*\|/ { gsub(/^[[:space:]]+|[[:space:]]+$/, "", $2); print $2 }' "$TARGET/specs/SKILLS.md")
+  done < <(awk -F'|' '/^\|[[:space:]]*[a-z0-9-]+[[:space:]]*\|/ { gsub(/^[[:space:]]+|[[:space:]]+$/, "", $2); print $2 }' "$TARGET/.kpl/specs/SKILLS.md")
 fi
 
 if [[ -d "$TARGET/.cursor" ]]; then

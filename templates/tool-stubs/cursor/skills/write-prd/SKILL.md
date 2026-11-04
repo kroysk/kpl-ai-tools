@@ -10,13 +10,13 @@ description: >-
 
 ## Preconditions
 
-- `specs/features/<id>/discovery.md` status **approved** (or user explicitly overrides with noted risk).
-- Template: `specs/_templates/prd.md`.
+- `.kpl/specs/features/<id>/discovery.md` status **approved** (or user explicitly overrides with noted risk).
+- Template: `.kpl/specs/_templates/prd.md`.
 
 ## Steps
 
-1. Read approved discovery + `specs/stack.md` / access conventions if any.
-2. Write `specs/features/<id>/prd.md`:
+1. Read approved discovery + `.kpl/specs/stack.md` / access conventions if any.
+2. Write `.kpl/specs/features/<id>/prd.md`:
    - Primary goal, Problem, Non-goals
    - FR max **8**; AC binary and mapped to FR
    - Endpoints if HTTP — each with access; **no TBD**

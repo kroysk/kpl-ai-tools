@@ -1,5 +1,5 @@
 # Install Kephale AI Toolkit (kpl-ai-tools) SDD control plane into a project.
-# Windows PowerShell. Merge-safe: never deletes specs/features/**; does not touch src/ app/.
+# Windows PowerShell. Merge-safe: never deletes .kpl/specs/features/**; does not touch src/ app/.
 #
 # Usage (from a local clone):
 #   powershell -NoProfile -ExecutionPolicy Bypass -File scripts\install.ps1 [target-dir]
@@ -145,8 +145,8 @@ New-Item -ItemType Directory -Path $Target -Force | Out-Null
 $Target = (Resolve-Path $Target).Path
 
 if ($Refresh) {
-    if (-not (Test-Path (Join-Path $Target "AGENTS.md")) -or -not (Test-Path (Join-Path $Target "agents"))) {
-        throw "Refresh requires an existing control plane (AGENTS.md + agents/). Use install without -Refresh for first-time setup."
+    if (-not (Test-Path (Join-Path $Target "AGENTS.md")) -or -not (Test-Path (Join-Path $Target ".kpl\agents"))) {
+        throw "Refresh requires an existing control plane (AGENTS.md + .kpl/agents/). Use install without -Refresh for first-time setup."
     }
 }
 
@@ -156,7 +156,7 @@ $Cleanup = $null
 # Local kit if this script lives inside kpl-ai-tools
 if ($PSScriptRoot) {
     $candidate = Split-Path -Parent $PSScriptRoot
-    if ((Test-Path (Join-Path $candidate "templates\agents")) -and (Test-Path (Join-Path $candidate "templates\tool-stubs"))) {
+    if ((Test-Path (Join-Path $candidate "templates\.kpl\agents")) -and (Test-Path (Join-Path $candidate "templates\tool-stubs"))) {
         $KitRoot = $candidate
         Write-Host "    kit: local $KitRoot"
     }
@@ -173,7 +173,7 @@ if (-not $KitRoot) {
 }
 
 $Templates = Join-Path $KitRoot "templates"
-if (-not (Test-Path (Join-Path $Templates "agents"))) {
+if (-not (Test-Path (Join-Path $Templates ".kpl\agents"))) {
     throw "templates missing in kit: $Templates"
 }
 
@@ -183,9 +183,9 @@ $bakStackHooks = @{}
 $userInterior = $null
 $userBlockWarn = $false
 if ($Refresh) {
-    $bakControl = Backup-IfExists (Join-Path $Target "agents\CONTROL_PLANE.md")
+    $bakControl = Backup-IfExists (Join-Path $Target ".kpl\agents\CONTROL_PLANE.md")
     $hookPaths = @(
-        (Join-Path $Target "agents\skills\architecture-mentor\stack-hooks.md"),
+        (Join-Path $Target ".kpl\agents\skills\architecture-mentor\stack-hooks.md"),
         (Join-Path $Target ".cursor\skills\architecture-mentor\stack-hooks.md"),
         (Join-Path $Target ".claude\skills\architecture-mentor\stack-hooks.md"),
         (Join-Path $Target ".opencode\skills\architecture-mentor\stack-hooks.md")
@@ -209,27 +209,27 @@ if ($userBlockWarn) {
 }
 Copy-Item -Force (Join-Path $Templates "CLAUDE.md") (Join-Path $Target "CLAUDE.md")
 
-Merge-Dir (Join-Path $Templates "agents") (Join-Path $Target "agents")
+Merge-Dir (Join-Path $Templates ".kpl\agents") (Join-Path $Target ".kpl\agents")
 
 if ($Refresh -and $null -ne $bakControl) {
-    Restore-IfBacked (Join-Path $Target "agents\CONTROL_PLANE.md") $bakControl
+    Restore-IfBacked (Join-Path $Target ".kpl\agents\CONTROL_PLANE.md") $bakControl
 }
 
 $date = Get-Date -Format "yyyy-MM-dd"
 $stampMode = if ($Refresh) { "refresh" } else { "init" }
-Write-KplKitJson (Join-Path $Target "agents") $RepoUrl $Ref $date $stampMode
+Write-KplKitJson (Join-Path $Target ".kpl\agents") $RepoUrl $Ref $date $stampMode
 
-$specs = Join-Path $Target "specs"
+$specs = Join-Path $Target ".kpl\specs"
 New-Item -ItemType Directory -Path $specs -Force | Out-Null
 
 foreach ($item in @("README.md", "SKILLS.md")) {
-    $src = Join-Path $Templates "specs\$item"
+    $src = Join-Path $Templates ".kpl\specs\$item"
     if (Test-Path $src) {
         Copy-Item -Force $src (Join-Path $specs $item)
     }
 }
 
-$stackSrc = Join-Path $Templates "specs\stack.md"
+$stackSrc = Join-Path $Templates ".kpl\specs\stack.md"
 $stackDest = Join-Path $specs "stack.md"
 if (Test-Path $stackSrc) {
     if ($Refresh) {
@@ -239,7 +239,7 @@ if (Test-Path $stackSrc) {
     }
 }
 
-$contractSrc = Join-Path $Templates "specs\contract"
+$contractSrc = Join-Path $Templates ".kpl\specs\contract"
 $contractDest = Join-Path $specs "contract"
 if (Test-Path $contractSrc) {
     if ($Refresh) {
@@ -257,7 +257,7 @@ if (Test-Path $contractSrc) {
     }
 }
 
-Merge-Dir (Join-Path $Templates "specs\_templates") (Join-Path $specs "_templates")
+Merge-Dir (Join-Path $Templates ".kpl\specs\_templates") (Join-Path $specs "_templates")
 
 $bootstrap = Join-Path $specs "features\_bootstrap"
 New-Item -ItemType Directory -Path $bootstrap -Force | Out-Null
@@ -282,8 +282,8 @@ Source: $RepoUrl @ $Ref
 "@ | Set-Content -Path $bootstrapReadme -Encoding utf8
 }
 
-$memorySrc = Join-Path $Templates "memory"
-$memoryDest = Join-Path $Target "memory"
+$memorySrc = Join-Path $Templates ".kpl\memory"
+$memoryDest = Join-Path $Target ".kpl\memory"
 if (Test-Path $memorySrc) {
     if ($Refresh) {
         Merge-MemoryRefresh $memorySrc $memoryDest
@@ -329,7 +329,7 @@ if (Test-Path $mergeHooks) {
 
 $practices = Join-Path $KitRoot "practices"
 if (Test-Path $practices) {
-    Merge-Dir $practices (Join-Path $Target "agents\practices")
+    Merge-Dir $practices (Join-Path $Target ".kpl\agents\practices")
 }
 
 if ($Cleanup) {
@@ -341,14 +341,14 @@ Write-Host "Done. Control plane ${modeLabel}ed at:"
 Write-Host "  $Target"
 Write-Host ""
 if ($Refresh) {
-    Write-Host "Preserved: specs/features/**, stack.md, contract/README.md, CONTROL_PLANE,"
+    Write-Host "Preserved: .kpl/specs/features/**, stack.md, contract/README.md, CONTROL_PLANE,"
     Write-Host "  stack-hooks.md, memory INDEX/cards, opencode.json, AGENTS.md kpl:user block; hooks merged."
-    Write-Host "Updated: AGENTS/CLAUDE (canon), agents skills/rules/hooks, kpl-kit.json, tool skill packs, token-io."
+    Write-Host "Updated: AGENTS/CLAUDE (canon), .kpl agents skills/rules/hooks, kpl-kit.json, tool skill packs, token-io."
 } else {
     Write-Host "Next:"
     Write-Host "  1. Open this project in Cursor / Claude Code / OpenCode"
-    Write-Host "  2. Fill specs/stack.md for your stack"
-    Write-Host "  3. Start with skill: feature-discovery (or sdd-onboard)"
+    Write-Host "  2. Fill .kpl/specs/stack.md for your stack"
+    Write-Host "  3. Start with skill: sdd-onboard (routes to kpl-new-project / feature-discovery / fix-bug)"
 }
 Write-Host ""
 Write-Host "Did not modify application source (src/, app/, etc.)."

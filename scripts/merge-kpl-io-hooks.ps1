@@ -14,9 +14,9 @@ $ErrorActionPreference = "Stop"
 $Target = (Resolve-Path $Target).Path
 $IsWin = [System.Environment]::OSVersion.Platform -eq "Win32NT" -or $env:OS -eq "Windows_NT"
 $HookCmd = if ($IsWin) {
-    "powershell -NoProfile -ExecutionPolicy Bypass -File agents/hooks/kpl-check-read.ps1"
+    "powershell -NoProfile -ExecutionPolicy Bypass -File .kpl/agents/hooks/kpl-check-read.ps1"
 } else {
-    "sh agents/hooks/kpl-check-read.sh"
+    "sh .kpl/agents/hooks/kpl-check-read.sh"
 }
 
 function Read-JsonFile([string]$Path) {

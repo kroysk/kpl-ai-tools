@@ -1,4 +1,4 @@
----
+﻿---
 name: sdd-onboard
 description: >-
   Guided first walkthrough of the SDD cycle on a small real change. Stops at
@@ -13,14 +13,15 @@ Walk one **small real** change through the control plane. Stop at every human ga
 
 ## Preconditions
 
-- Control plane present (`AGENTS.md`, `specs/`). Prefer filled `specs/stack.md`.
+- Control plane present (`AGENTS.md`, `.kpl/specs/`). Prefer filled `.kpl/specs/stack.md`.
 - User names a small change in **this** repo (or agrees to pick one).
 
 ## Steps
 
-1. Classify with `agents/rules/sdd-cycle.md`:
-   - **Fix path** (known files, no new capability/FR/trust boundary) → hand off to `git-branch` (`fix/`) and stop. Diff size does not choose.
-   - **Feature path** → continue.
+1. Classify with `.kpl/agents/rules/sdd-cycle.md` (architect's call, brief — see `.kpl/agents/rules/architecture-mentor.md`):
+   - **New project** (no existing code) → hand off to `kpl-new-project` and stop.
+   - **Fix** (known files, no new capability/FR/trust boundary) → hand off to `fix-bug` and stop. Diff size does not choose.
+   - **Feature** → continue.
 2. Load `feature-discovery`. Create `discovery.md`. Stop until the human approves.
 3. After approval: load `write-prd`. Stop until the human approves.
 4. After approval: load `write-feature-spec` (and tasks). Stop until specs are ready / human approves the Code gate.

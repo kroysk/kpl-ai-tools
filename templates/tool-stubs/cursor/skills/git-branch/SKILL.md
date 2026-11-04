@@ -10,7 +10,7 @@ description: >-
 
 ## Rules
 
-Follow `agents/rules/git-branches.md`.
+Follow `.kpl/agents/rules/git-branches.md`.
 
 | Type | Prefix |
 | --- | --- |
@@ -20,7 +20,7 @@ Follow `agents/rules/git-branches.md`.
 
 ## Steps
 
-1. Confirm path: **fix path** (known files, no new capability/FR/trust boundary) → prefix `fix/`, no discovery. Otherwise use `feature/` or `chore/` from an approved feature package. Diff size does not choose. See `agents/rules/sdd-cycle.md`.
+1. Confirm path: **fix** (known files, no new capability/FR/trust boundary, same rigor as a feature) → prefix `fix/`, started via `fix-bug` skill, not a shortcut. Otherwise use `feature/` or `chore/` from an approved feature package. Diff size does not choose. See `.kpl/agents/rules/sdd-cycle.md`.
 2. Confirm current branch; if on `main`/`master`, create new branch before any code edit.
 3. Name: `<prefix><slug>` matching feature id when possible (same slug across packages).
 4. Create and check out the branch (user’s git workflow; no force; no config changes).

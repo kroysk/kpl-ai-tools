@@ -1,10 +1,10 @@
-# Verify token-I/O hook allow/deny and merge-safe init behavior.
+﻿# Verify token-I/O hook allow/deny and merge-safe init behavior.
 # Run from kit root:
 #   powershell -NoProfile -ExecutionPolicy Bypass -File scripts/test-kpl-io-policy.ps1
 
 $ErrorActionPreference = "Stop"
 $KitRoot = Split-Path -Parent $PSScriptRoot
-$hook = Join-Path $KitRoot "templates\agents\hooks\kpl-check-read.ps1"
+$hook = Join-Path $KitRoot "templates\.kpl\agents\hooks\kpl-check-read.ps1"
 $failed = 0
 
 function Assert-True($Cond, [string]$Msg) {
@@ -19,9 +19,9 @@ function Assert-True($Cond, [string]$Msg) {
 $work = Join-Path ([System.IO.Path]::GetTempPath()) ("kpl-io-test-" + [guid]::NewGuid().ToString("N"))
 New-Item -ItemType Directory -Path $work -Force | Out-Null
 try {
-    New-Item -ItemType Directory -Path (Join-Path $work "agents\hooks") -Force | Out-Null
-    Copy-Item (Join-Path $KitRoot "templates\agents\io-policy.json") (Join-Path $work "agents\io-policy.json")
-    Copy-Item $hook (Join-Path $work "agents\hooks\kpl-check-read.ps1")
+    New-Item -ItemType Directory -Path (Join-Path $work ".kpl\agents\hooks") -Force | Out-Null
+    Copy-Item (Join-Path $KitRoot "templates\.kpl\agents\io-policy.json") (Join-Path $work ".kpl\agents\io-policy.json")
+    Copy-Item $hook (Join-Path $work ".kpl\agents\hooks\kpl-check-read.ps1")
     Set-Content -Path (Join-Path $work "AGENTS.md") -Value "# test" -Encoding utf8
 
     $big = Join-Path $work "big.cs"

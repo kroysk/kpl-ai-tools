@@ -21,52 +21,52 @@ Write-Host "==> kpl-doctor"
 Write-Host "    target: $Target"
 
 # kpl-kit.json
-$kitJson = Join-Path $Target "agents\kpl-kit.json"
+$kitJson = Join-Path $Target ".kpl\agents\kpl-kit.json"
 if (-not (Test-Path -LiteralPath $kitJson)) {
-    Add-Fail "missing agents/kpl-kit.json"
+    Add-Fail "missing .kpl/agents/kpl-kit.json"
 } else {
     try {
         $stamp = Get-Content -LiteralPath $kitJson -Raw -Encoding UTF8 | ConvertFrom-Json
         foreach ($field in @("kit", "repo", "ref", "installedAt")) {
             $has = $stamp.PSObject.Properties.Name -contains $field
             if (-not $has -or [string]::IsNullOrWhiteSpace([string]$stamp.$field)) {
-                Add-Fail "agents/kpl-kit.json missing or empty field: $field"
+                Add-Fail ".kpl/agents/kpl-kit.json missing or empty field: $field"
             }
         }
     } catch {
-        Add-Fail "agents/kpl-kit.json is not valid JSON"
+        Add-Fail ".kpl/agents/kpl-kit.json is not valid JSON"
     }
 }
 
 # Core paths
 if (-not (Test-Path -LiteralPath (Join-Path $Target "AGENTS.md"))) { Add-Fail "missing AGENTS.md" }
-if (-not (Test-Path -LiteralPath (Join-Path $Target "agents"))) { Add-Fail "missing agents/" }
-if (-not (Test-Path -LiteralPath (Join-Path $Target "specs\SKILLS.md"))) { Add-Fail "missing specs/SKILLS.md" }
-if (-not (Test-Path -LiteralPath (Join-Path $Target "memory\INDEX.md"))) { Add-Fail "missing memory/INDEX.md" }
+if (-not (Test-Path -LiteralPath (Join-Path $Target ".kpl\agents"))) { Add-Fail "missing .kpl/agents/" }
+if (-not (Test-Path -LiteralPath (Join-Path $Target ".kpl\specs\SKILLS.md"))) { Add-Fail "missing .kpl/specs/SKILLS.md" }
+if (-not (Test-Path -LiteralPath (Join-Path $Target ".kpl\memory\INDEX.md"))) { Add-Fail "missing .kpl/memory/INDEX.md" }
 
 # stack.md
-$stackPath = Join-Path $Target "specs\stack.md"
+$stackPath = Join-Path $Target ".kpl\specs\stack.md"
 if (-not (Test-Path -LiteralPath $stackPath)) {
-    Add-Fail "missing specs/stack.md"
+    Add-Fail "missing .kpl/specs/stack.md"
 } else {
     $stackText = (Get-Content -LiteralPath $stackPath -Raw -Encoding UTF8).Trim()
     $templateish = ($stackText -match '(?i)Filled by `?kpl-sdd-init') -or ($stackText -eq "# Stack") -or ($stackText.Length -lt 40)
     if ($templateish) {
-        Add-Warn "specs/stack.md still looks like the unfilled template"
+        Add-Warn ".kpl/specs/stack.md still looks like the unfilled template"
     }
 }
 
 # Skills listed in SKILLS.md
-$skillsMd = Join-Path $Target "specs\SKILLS.md"
+$skillsMd = Join-Path $Target ".kpl\specs\SKILLS.md"
 if (Test-Path -LiteralPath $skillsMd) {
     $skillsText = Get-Content -LiteralPath $skillsMd -Raw -Encoding UTF8
     $skillNames = [regex]::Matches($skillsText, '(?m)^\|\s*([a-z0-9-]+)\s*\|') |
         ForEach-Object { $_.Groups[1].Value } |
         Where-Object { $_ -ne "Skill" -and $_ -notmatch '^-+$' }
     foreach ($name in $skillNames) {
-        $skillFile = Join-Path $Target "agents\skills\$name\SKILL.md"
+        $skillFile = Join-Path $Target ".kpl\agents\skills\$name\SKILL.md"
         if (-not (Test-Path -LiteralPath $skillFile)) {
-            Add-Fail "skill listed in SKILLS.md but missing: agents/skills/$name/SKILL.md"
+            Add-Fail "skill listed in SKILLS.md but missing: .kpl/agents/skills/$name/SKILL.md"
         }
     }
 }

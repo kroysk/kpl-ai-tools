@@ -14,12 +14,12 @@ description: >-
 
 - Specs **ready** (or user override documented).
 - Branch ≠ `main`/`master` — create via `git-branch` first.
-- Read only the current `specs/features/<id>/` files needed + max 1–2 memory cards.
+- Read only the current `.kpl/specs/features/<id>/` files needed + max 1–2 memory cards.
 
 ## Steps
 
 1. Confirm branch and open `tasks.md`.
-2. Climb pragmatic ladder (`agents/rules/pragmatic-ladder.md`) before adding structure.
+2. Climb pragmatic ladder (`.kpl/agents/rules/pragmatic-ladder.md`) before adding structure.
 3. Non-trivial structure → `architecture-mentor` (Teach-on-implement or Decide); paste Architecture note in the reply.
 4. Implement task-by-task; mark `T-*` done/blocked; keep session log short.
 5. Apply STANDARDS / clean-solid; min diff; no unrequested deps.

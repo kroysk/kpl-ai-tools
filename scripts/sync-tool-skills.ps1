@@ -1,10 +1,10 @@
-# Sync canonical agents/skills → tool-stubs for Cursor, Claude, OpenCode.
+# Sync canonical .kpl/agents/skills → tool-stubs for Cursor, Claude, OpenCode.
 # Run from kit root:
 #   powershell -NoProfile -ExecutionPolicy Bypass -File scripts/sync-tool-skills.ps1
 
 $ErrorActionPreference = "Stop"
 $KitRoot = Split-Path -Parent $PSScriptRoot
-$Canon = Join-Path $KitRoot "templates\agents\skills"
+$Canon = Join-Path $KitRoot "templates\.kpl\agents\skills"
 $Targets = @(
     (Join-Path $KitRoot "templates\tool-stubs\cursor\skills"),
     (Join-Path $KitRoot "templates\tool-stubs\claude\skills"),

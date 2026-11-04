@@ -12,14 +12,14 @@ description: >-
 ## Preconditions
 
 - Feature touched HTTP/API or trust boundary; prefer all related `T-*` done.
-- Template: `specs/_templates/security-review.md`.
-- Rule: `agents/rules/security-closeout.md`.
+- Template: `.kpl/specs/_templates/security-review.md`.
+- Rule: `.kpl/agents/rules/security-closeout.md`.
 
 ## Steps
 
 1. Seed **Scope** from the endpoint-access matrix + changed API/trust-boundary files for this feature. If the feature touches LLM/tools/MCP, include that boundary in Scope.
 2. If `security-review.md` already exists, revalidate any `S-*` whose evidence paths changed; do not rewrite blindly.
-3. Write/update `specs/features/<id>/security-review.md` from the template:
+3. Write/update `.kpl/specs/features/<id>/security-review.md` from the template:
    - Scope (surfaces, out of scope, source_ref)
    - Table `S-001…`: kind | severity | area | boundary | evidence (`path:line`) | finding | smallest fix | status
    - Verdict: `pass` | `pass_with_findings` | `fail`

@@ -1,4 +1,4 @@
-# Verify kpl-doctor: fresh install PASSes with WARN on stack.md; missing skill → FAIL.
+﻿# Verify kpl-doctor: fresh install PASSes with WARN on stack.md; missing skill → FAIL.
 # Run from kit root:
 #   powershell -NoProfile -ExecutionPolicy Bypass -File scripts/test-kpl-doctor.ps1
 
@@ -23,7 +23,7 @@ try {
     New-Item -ItemType Directory -Path $target -Force | Out-Null
 
     & (Join-Path $KitRoot "scripts\install.ps1") -Target $target
-    Assert-True (Test-Path (Join-Path $target "agents\kpl-kit.json")) "install writes kpl-kit.json"
+    Assert-True (Test-Path (Join-Path $target ".kpl\agents\kpl-kit.json")) "install writes kpl-kit.json"
     Assert-True ((Get-Content (Join-Path $target "AGENTS.md") -Raw) -match "kpl:user:start") "AGENTS.md has kpl:user markers"
 
     $doctor = Join-Path $KitRoot "scripts\kpl-doctor.ps1"
@@ -32,7 +32,7 @@ try {
     Assert-True ($exitWarn -eq 0) "fresh install doctor exits 0 (WARN on unfilled stack allowed)"
 
     # Remove a skill that SKILLS.md lists → FAIL
-    $bulk = Join-Path $target "agents\skills\bulk-read"
+    $bulk = Join-Path $target ".kpl\agents\skills\bulk-read"
     Remove-Item -Recurse -Force $bulk
     & $doctor -Target $target
     $exitFail = $LASTEXITCODE

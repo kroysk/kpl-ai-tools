@@ -1,4 +1,4 @@
----
+﻿---
 name: kpl-project-explore
 description: >-
   Explores any codebase readonly, asks up to 8 clarifying questions, and writes
@@ -16,7 +16,7 @@ Kit root: folder containing this skill (`kpl-ai-tools/`). Target = project to un
    - Top-level dirs; README; docker-compose / Dockerfile
    - Lockfiles (`package.json`, `composer.json`, `go.mod`, `Cargo.toml`, `pyproject.toml`, …)
    - Monorepo signals (`apps/`, `packages/`, `services/`, workspaces)
-   - Existing `agents/`, `specs/`, `AGENTS.md`, `CLAUDE.md`
+   - Existing `.kpl/agents/`, `.kpl/specs/`, `AGENTS.md`, `CLAUDE.md`
    - Tool skill packs: `.cursor/skills/`, `.claude/skills/`, `.opencode/skills/`
    - Cursor rules: `.cursor/rules/`; OpenCode config: `.opencode/opencode.json` if present
 2. **Ask ≤8 questions** (skip if already answered):
