@@ -3,4 +3,4 @@ description: HTTP routes must declare access public or permission code; server e
 alwaysApply: false
 ---
 
-Every HTTP endpoint: `access: public` or `access: permission:<code>`. Never leave auth TBD. UI hide ≠ security. See `agents/rules/endpoint-access.md` and skill `endpoint-access`.
+Every HTTP endpoint: `access: public` or `access: permission:<code>`. Never leave auth TBD. UI hide ≠ security. See `.kpl/agents/rules/endpoint-access.md` and skill `endpoint-access`.

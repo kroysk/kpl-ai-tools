@@ -5,21 +5,19 @@ alwaysApply: true
 
 # kpl-core
 
-Follow `AGENTS.md`. Product memory in `specs/`; agent canon in `agents/`.
+Follow `AGENTS.md`. Product memory in `.kpl/specs/`; agent canon in `.kpl/agents/`.
 
 ## Token protocol
 
-1. One skill (`agents/skills/<name>/` or `.cursor/skills/<name>/` — same body)
-2. `memory/INDEX.md` → max 1–2 cards
-3. Only current `specs/features/<id>/` files needed
+1. One skill (`.kpl/agents/skills/<name>/` or `.cursor/skills/<name>/` — same body)
+2. `.kpl/memory/INDEX.md` → max 1–2 cards
+3. Only current `.kpl/specs/features/<id>/` files needed
 4. STANDARDS + pragmatic ladder — don't paste into chat
 5. Product files ≥500 lines: Grep or Read with offset/limit; hook blocks → skill `bulk-read`
 
-## Cycle
+## Entries
 
-Discover → PRD → specs+tasks → designer brief → mockups → branch → implement → security → publish
-
-**Fix path** (all four): known files, no new capability, no new FR, no new trust boundary → `fix/` + implement. Diff size does not choose. **Feature path** otherwise. Scope change: edit PRD first.
+`kpl-new-project` (no existing code) | `feature-discovery` (new capability/actor/route) | `fix-bug` (known files, no new capability/FR/trust boundary). Feature and fix share the same cycle and gates: Discover → PRD → specs+tasks → designer brief → mockups → branch → implement → security → publish. Fix differs only in branch prefix (`fix/`) and a mandatory root-cause field. Diff size does not choose the path. Scope change: edit PRD first.
 
 ## Branches
 
@@ -27,10 +25,10 @@ Never on `main`. Prefixes: `feature/` | `fix/` | `chore/`
 
 ## Architecture mentor
 
-On design or non-trivial implement: **Pattern / Why here / Tradeoff / Not doing**. Prefer boring. Ladder before layers.
+Present (brief, 3–4 lines) in all three entries, every non-trivial step: **Pattern / Why here / Tradeoff / Not doing**, then ask once if the user wants it expanded. Prefer boring. Ladder before layers.
 
-Load skill `architecture-mentor` when crossing modules, auth, data ownership, trust boundaries, or writing an ADR.
+Load skill `architecture-mentor` for the deep dive when crossing modules, auth, data ownership, trust boundaries, a new project's first ADR, or writing an ADR.
 
 ## Skills
 
-Discover by description under `.cursor/skills/`. Index: `specs/SKILLS.md`. Full practices: `agents/rules/`.
+Discover by description under `.cursor/skills/`. Index: `.kpl/specs/SKILLS.md`. Full practices: `.kpl/agents/rules/`.
