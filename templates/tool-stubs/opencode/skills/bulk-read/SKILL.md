@@ -1,4 +1,4 @@
----
+﻿---
 name: bulk-read
 description: >-
   Answers one question about large files via Grep and targeted reads
@@ -9,7 +9,7 @@ description: >-
 
 # bulk-read
 
-Follow `agents/rules/token-io.md`. Threshold: `agents/io-policy.json` (default 500; `KPL_READ_MIN_LINES`, `0` disables hooks).
+Follow `.kpl/agents/rules/token-io.md`. Threshold: `.kpl/agents/io-policy.json` (default 500; `KPL_READ_MIN_LINES`, `0` disables hooks).
 
 ## Preconditions
 

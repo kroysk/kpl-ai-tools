@@ -8,9 +8,9 @@ TARGET="${1:-.}"
 TARGET="$(cd "$TARGET" && pwd)"
 
 if [[ "$(uname -s)" == "MINGW"* || "$(uname -s)" == "MSYS"* || "$(uname -s)" == "CYGWIN"* ]]; then
-  HOOK_CMD="powershell -NoProfile -ExecutionPolicy Bypass -File agents/hooks/kpl-check-read.ps1"
+  HOOK_CMD="powershell -NoProfile -ExecutionPolicy Bypass -File .kpl/agents/hooks/kpl-check-read.ps1"
 else
-  HOOK_CMD="sh agents/hooks/kpl-check-read.sh"
+  HOOK_CMD="sh .kpl/agents/hooks/kpl-check-read.sh"
 fi
 
 merge_py() {

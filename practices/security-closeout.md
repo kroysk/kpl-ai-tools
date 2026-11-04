@@ -1,6 +1,6 @@
-# Security closeout
+﻿# Security closeout
 
-When all `T-*` for an API-touching (or trust-boundary) feature are `done`, write `security-review.md` from `specs/_templates/security-review.md`.
+When all `T-*` for an API-touching (or trust-boundary) feature are `done`, write `security-review.md` from `.kpl/specs/_templates/security-review.md`.
 
 Require **Scope** + findings with kind (`confirmed` | `needs_validation` | `hardening`) and evidence `path:line`. Defensive remediations only — **no** exploits/PoCs.
 

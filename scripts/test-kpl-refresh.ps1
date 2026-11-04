@@ -1,4 +1,4 @@
-# Verify install -Refresh preserves customizations and updates kit scaffold.
+﻿# Verify install -Refresh preserves customizations and updates kit scaffold.
 # Run from kit root:
 #   powershell -NoProfile -ExecutionPolicy Bypass -File scripts/test-kpl-refresh.ps1
 
@@ -25,7 +25,7 @@ try {
     # Fresh install first
     & (Join-Path $KitRoot "scripts\install.ps1") -Target $target
     Assert-True (Test-Path (Join-Path $target "AGENTS.md")) "fresh install creates AGENTS.md"
-    Assert-True (Test-Path (Join-Path $target "agents\io-policy.json")) "fresh install copies io-policy"
+    Assert-True (Test-Path (Join-Path $target ".kpl\agents\io-policy.json")) "fresh install copies io-policy"
 
     # Customize preserve targets
     $stackMarker = "CUSTOM_STACK_MARKER_42"
@@ -36,22 +36,22 @@ try {
     $ocMarker = "CUSTOM_OPENCODE_JSON"
     $bootMarker = "ORIGINAL_BOOTSTRAP_LINE"
 
-    Set-Content -LiteralPath (Join-Path $target "specs\stack.md") -Value "# Stack`n$stackMarker" -Encoding utf8
-    Set-Content -LiteralPath (Join-Path $target "agents\CONTROL_PLANE.md") -Value "# CP`n$cpMarker" -Encoding utf8
-    Set-Content -LiteralPath (Join-Path $target "agents\skills\architecture-mentor\stack-hooks.md") -Value "# Hooks`n$hookMarker" -Encoding utf8
+    Set-Content -LiteralPath (Join-Path $target ".kpl\specs\stack.md") -Value "# Stack`n$stackMarker" -Encoding utf8
+    Set-Content -LiteralPath (Join-Path $target ".kpl\agents\CONTROL_PLANE.md") -Value "# CP`n$cpMarker" -Encoding utf8
+    Set-Content -LiteralPath (Join-Path $target ".kpl\agents\skills\architecture-mentor\stack-hooks.md") -Value "# Hooks`n$hookMarker" -Encoding utf8
     New-Item -ItemType Directory -Path (Join-Path $target ".cursor\skills\architecture-mentor") -Force | Out-Null
     Set-Content -LiteralPath (Join-Path $target ".cursor\skills\architecture-mentor\stack-hooks.md") -Value "# CursorHooks`n$hookMarker" -Encoding utf8
 
-    $featDir = Join-Path $target "specs\features\demo-feat"
+    $featDir = Join-Path $target ".kpl\specs\features\demo-feat"
     New-Item -ItemType Directory -Path $featDir -Force | Out-Null
     Set-Content -LiteralPath (Join-Path $featDir "discovery.md") -Value $featureMarker -Encoding utf8
 
-    Set-Content -LiteralPath (Join-Path $target "memory\INDEX.md") -Value "# Index`n$memMarker" -Encoding utf8
-    Set-Content -LiteralPath (Join-Path $target "memory\cards\my-lesson.md") -Value "# Lesson keep" -Encoding utf8
+    Set-Content -LiteralPath (Join-Path $target ".kpl\memory\INDEX.md") -Value "# Index`n$memMarker" -Encoding utf8
+    Set-Content -LiteralPath (Join-Path $target ".kpl\memory\cards\my-lesson.md") -Value "# Lesson keep" -Encoding utf8
 
     Set-Content -LiteralPath (Join-Path $target ".opencode\opencode.json") -Value ('{"$schema":"' + $ocMarker + '"}') -Encoding utf8
 
-    $boot = Join-Path $target "specs\features\_bootstrap\README.md"
+    $boot = Join-Path $target ".kpl\specs\features\_bootstrap\README.md"
     Set-Content -LiteralPath $boot -Value "# Bootstrap`n`n$bootMarker" -Encoding utf8
 
     # User Cursor hook that must survive merge
@@ -64,27 +64,46 @@ try {
     } | ConvertTo-Json -Depth 6) -Encoding utf8
 
     # Contract README customized
-    Set-Content -LiteralPath (Join-Path $target "specs\contract\README.md") -Value "# Contract`nCUSTOM_CONTRACT" -Encoding utf8
+    Set-Content -LiteralPath (Join-Path $target ".kpl\specs\contract\README.md") -Value "# Contract`nCUSTOM_CONTRACT" -Encoding utf8
+
+    # AGENTS.md: mark inside kpl:user (must survive) and outside (must not)
+    $userMarker = "CUSTOM_USER_BLOCK_KEEP"
+    $outsideMarker = "CUSTOM_OUTSIDE_MUST_DIE"
+    $agentsPath = Join-Path $target "AGENTS.md"
+    $agentsText = Get-Content -LiteralPath $agentsPath -Raw -Encoding UTF8
+    $agentsText = $agentsText -replace '(?s)(<!-- kpl:user:start -->).*?(<!-- kpl:user:end -->)', "`$1`n$userMarker`n`$2"
+    $agentsText = $agentsText -replace '(## Skills)', "$outsideMarker`n`n`$1"
+    Set-Content -LiteralPath $agentsPath -Value $agentsText -Encoding utf8 -NoNewline
 
     # Refresh
     & (Join-Path $KitRoot "scripts\install.ps1") -Refresh -Target $target
 
-    Assert-True ((Get-Content (Join-Path $target "specs\stack.md") -Raw) -match $stackMarker) "stack.md preserved"
-    Assert-True ((Get-Content (Join-Path $target "agents\CONTROL_PLANE.md") -Raw) -match $cpMarker) "CONTROL_PLANE preserved"
-    Assert-True ((Get-Content (Join-Path $target "agents\skills\architecture-mentor\stack-hooks.md") -Raw) -match $hookMarker) "agents stack-hooks preserved"
+    Assert-True ((Get-Content (Join-Path $target ".kpl\specs\stack.md") -Raw) -match $stackMarker) "stack.md preserved"
+    Assert-True ((Get-Content (Join-Path $target ".kpl\agents\CONTROL_PLANE.md") -Raw) -match $cpMarker) "CONTROL_PLANE preserved"
+    Assert-True ((Get-Content (Join-Path $target ".kpl\agents\skills\architecture-mentor\stack-hooks.md") -Raw) -match $hookMarker) "agents stack-hooks preserved"
     Assert-True ((Get-Content (Join-Path $target ".cursor\skills\architecture-mentor\stack-hooks.md") -Raw) -match $hookMarker) "cursor stack-hooks preserved"
     Assert-True ((Get-Content (Join-Path $featDir "discovery.md") -Raw) -match $featureMarker) "specs/features preserved"
-    Assert-True ((Get-Content (Join-Path $target "memory\INDEX.md") -Raw) -match $memMarker) "memory INDEX preserved"
-    Assert-True (Test-Path (Join-Path $target "memory\cards\my-lesson.md")) "memory card preserved"
+    Assert-True ((Get-Content (Join-Path $target ".kpl\memory\INDEX.md") -Raw) -match $memMarker) "memory INDEX preserved"
+    Assert-True (Test-Path (Join-Path $target ".kpl\memory\cards\my-lesson.md")) "memory card preserved"
     Assert-True ((Get-Content (Join-Path $target ".opencode\opencode.json") -Raw) -match $ocMarker) "opencode.json preserved"
-    Assert-True ((Get-Content (Join-Path $target "specs\contract\README.md") -Raw) -match "CUSTOM_CONTRACT") "contract README preserved"
+    Assert-True ((Get-Content (Join-Path $target ".kpl\specs\contract\README.md") -Raw) -match "CUSTOM_CONTRACT") "contract README preserved"
+
+    $agentsAfter = Get-Content $agentsPath -Raw -Encoding UTF8
+    Assert-True ($agentsAfter -match $userMarker) "AGENTS.md kpl:user interior preserved"
+    Assert-True ($agentsAfter -notmatch $outsideMarker) "AGENTS.md text outside kpl:user replaced"
+
+    $kitStamp = Get-Content (Join-Path $target ".kpl\agents\kpl-kit.json") -Raw -Encoding UTF8 | ConvertFrom-Json
+    Assert-True ($kitStamp.mode -eq "refresh") "kpl-kit.json mode is refresh"
+    Assert-True (-not [string]::IsNullOrWhiteSpace([string]$kitStamp.ref)) "kpl-kit.json has ref"
 
     $bootText = Get-Content $boot -Raw
     Assert-True ($bootText -match $bootMarker) "bootstrap original kept"
     Assert-True ($bootText -match "Refreshed") "bootstrap append Refreshed"
 
-    Assert-True (Test-Path (Join-Path $target "agents\skills\bulk-read\SKILL.md")) "bulk-read skill present after refresh"
-    Assert-True (Test-Path (Join-Path $target "agents\io-policy.json")) "io-policy present after refresh"
+    Assert-True (Test-Path (Join-Path $target ".kpl\agents\skills\bulk-read\SKILL.md")) "bulk-read skill present after refresh"
+    Assert-True (Test-Path (Join-Path $target ".kpl\agents\skills\kpl-doctor\SKILL.md")) "kpl-doctor skill present after refresh"
+    Assert-True (Test-Path (Join-Path $target ".kpl\agents\skills\sdd-onboard\SKILL.md")) "sdd-onboard skill present after refresh"
+    Assert-True (Test-Path (Join-Path $target ".kpl\agents\io-policy.json")) "io-policy present after refresh"
     Assert-True (Test-Path (Join-Path $target ".opencode\plugins\kpl-bulk-read.js")) "opencode plugin present"
 
     $cursorHooks = Get-Content (Join-Path $target ".cursor\hooks.json") -Raw

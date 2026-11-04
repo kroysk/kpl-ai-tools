@@ -1,4 +1,4 @@
-# Kephale AI Toolkit
+﻿# Kephale AI Toolkit
 
 **Spec-driven AI workflow for [Cursor](https://cursor.com), [Claude Code](https://docs.anthropic.com/en/docs/claude-code), and [OpenCode](https://opencode.ai)** — repo: [`kpl-ai-tools`](.)
 
@@ -8,7 +8,7 @@
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-skills-d97706)](#works-with)
 [![OpenCode](https://img.shields.io/badge/OpenCode-skills-0ea5e9)](#works-with)
 
-> **Product memory in git beats chat memory.** Explore any codebase → install a portable SDD control plane → ship features with discovery, PRDs, specs, tasks, an architecture mentor, and security closeout — without locking you to one stack.
+> **Product memory in git beats chat memory.** Explore any codebase → install a portable SDD control plane → ship new projects, features, and bugfixes with discovery, PRDs, specs, tasks, an always-present architecture mentor, and security closeout — without locking you to one stack.
 
 ---
 
@@ -17,9 +17,9 @@
 | Pain | What Kephale does |
 | --- | --- |
 | Agents forget context every session | PRDs, specs, tasks, and dense memory cards live **in the repo** |
-| “AI workflow” means random prompts | One gated cycle: Discover → PRD → Specs → Branch → Implement → Security → Publish |
+| “AI workflow” means random prompts | Three gated entries (new project, feature, fix) — same rigor, same gates |
 | Skills only work in one IDE | **Native** packs for Cursor, Claude Code, and OpenCode |
-| Over-engineered “enterprise” templates | Pragmatic ladder + architecture mentor that prefer **boring, correct** design |
+| Over-engineered “enterprise” templates | Pragmatic ladder + an architecture mentor **present in every flow**, not just on escalation |
 
 Built for developers and teams who want AI help that still looks like senior engineering.
 
@@ -27,7 +27,7 @@ Built for developers and teams who want AI help that still looks like senior eng
 
 ## Install from GitHub (Windows · Linux · macOS)
 
-Install the SDD control plane **into your project** directly from this repo. Merge-safe: never deletes `specs/features/**`, never touches `src/` / `app/`.
+Install the SDD control plane **into your project** directly from this repo. Merge-safe: never deletes `.kpl/specs/features/**`, never touches `src/` / `app/`.
 
 ### Windows (PowerShell)
 
@@ -90,7 +90,7 @@ git clone https://github.com/kroysk/kpl-ai-tools.git
 ### After install
 
 1. Open **your project** in Cursor / Claude Code / OpenCode  
-2. Fill `specs/stack.md`  
+2. Fill `.kpl/specs/stack.md`  
 3. Start with skill **`feature-discovery`**
 
 Scripts: [`scripts/install.sh`](scripts/install.sh) · [`scripts/install.ps1`](scripts/install.ps1)
@@ -99,7 +99,7 @@ Scripts: [`scripts/install.sh`](scripts/install.sh) · [`scripts/install.ps1`](s
 
 ## Update an existing project
 
-When this kit ships new skills, rules, or token-I/O hooks, refresh a project that **already** has the control plane. Preserves `specs/features/**`, `stack.md`, `CONTROL_PLANE`, `stack-hooks`, memory cards, and `opencode.json`.
+When this kit ships new skills, rules, or token-I/O hooks, refresh a project that **already** has the control plane. Preserves `.kpl/specs/features/**`, `stack.md`, `CONTROL_PLANE`, `stack-hooks`, memory cards, and `opencode.json`.
 
 ### Windows (PowerShell)
 
@@ -160,10 +160,10 @@ Refresh the SDD control plane in ../my-app (kpl-sdd-refresh).
 
 ## What you get
 
-- **14 product skills** — discovery, PRD, specs/tasks, designer brief, implement-from-spec, quality gate, security reviews, git branch, publish, memory, endpoint access, **architecture mentor**, **bulk-read**
-- **Architecture mentor** — Pattern / Why / Tradeoff / Not doing; pattern catalog + review checklist; escalates on real boundaries
+- **18 product skills** — new-project bootstrap, feature discovery, bugfix, PRD, specs/tasks, designer brief, implement-from-spec, quality gate, security reviews, git branch, publish, memory, endpoint access, **architecture mentor**, **bulk-read**, **kpl-doctor**, **sdd-onboard**
+- **Architecture mentor, always present** — Pattern / Why / Tradeoff / Not doing in every flow (new project, feature, fix), not only on escalation; deepens only on request; pattern catalog + review checklist for the deep dive
 - **Practices** — pragmatic ladder, Clean/SOLID, SDD cycle, git branches, memory protocol, security closeout, designer mockups, token I/O
-- **Templates** — `AGENTS.md`, `agents/`, `specs/`, `memory/`, ready for any language/framework
+- **Templates** — `AGENTS.md`, `.kpl/agents/`, `.kpl/specs/`, `.kpl/memory/`, ready for any language/framework
 - **Token-light protocol** — INDEX + max 1–2 memory cards; don’t dump the whole specs tree; large product files go through `bulk-read` + hooks (default 500 lines)
 
 ---
@@ -178,7 +178,7 @@ Open **this** repo in any of the three tools — kit skills load immediately:
 | **Claude Code** | `.claude/skills/kpl-*` + `AGENTS.md` / `CLAUDE.md` | `.claude/skills/*` + `AGENTS.md` / `CLAUDE.md` |
 | **OpenCode** | `.opencode/skills/kpl-*` + `opencode.json` | `.opencode/skills/*` + `opencode.json` (if missing) |
 
-**Canon for product skills:** edit [`templates/agents/skills/`](templates/agents/skills/), then sync:
+**Canon for product skills:** edit [`templates/.kpl/agents/skills/`](templates/.kpl/agents/skills/), then sync:
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/sync-tool-skills.ps1
@@ -188,14 +188,36 @@ Identical skill bodies land in `templates/tool-stubs/{cursor,claude,opencode}/sk
 
 ---
 
-## Feature workflow (after init)
+## Workflow (after init)
+
+Three entries, one shared cycle, one architect present at every gate:
 
 ```mermaid
-flowchart LR
-  Discover --> PRD --> Specs --> Designer --> Branch --> Implement --> Security --> Publish
+flowchart TD
+  Start{{What are we doing?}}
+  Start -->|No existing code| NP[kpl-new-project]
+  Start -->|New capability / actor / route| FD[feature-discovery]
+  Start -->|Defect, known files| FB[fix-bug]
+
+  NP -->|interview + first ADR| FD
+
+  FD --> Discover[discovery.md]
+  FB --> Discover
+
+  Discover --> PRD --> Specs --> Designer[designer brief\noptional] --> Branch --> Implement --> Security --> Publish
+
+  AM[["🏛️ Architecture mentor\n(Pattern / Why / Tradeoff / Not doing)"]]
+  AM -.brief, every gate.-> Discover
+  AM -.brief, every gate.-> Specs
+  AM -.brief, every gate.-> Implement
+  AM -.deep dive on request.-> NP
 ```
 
-Trivial bugs can skip the full cycle. Scope changes edit the PRD first. See [`PROMPT.md`](PROMPT.md) for the philosophy.
+**New project** → `kpl-new-project` leads an architecture interview instead of reading code, then hands off to `feature-discovery` for the first real feature.
+**Feature** → full cycle, human gates at every arrow.
+**Fix** → `fix-bug`, same cycle and gates as a feature — only the branch prefix (`fix/`) and a mandatory root-cause field differ; designer brief is usually skipped.
+
+Diff size never chooses the path — scope does. Scope changes edit the PRD first. See [`PROMPT.md`](PROMPT.md) for the philosophy.
 
 ---
 
@@ -205,14 +227,16 @@ Trivial bugs can skip the full cycle. Scope changes edit the PRD first. See [`PR
 | --- | --- |
 | [PROMPT.md](PROMPT.md) | Philosophy |
 | [AGENTS.md](AGENTS.md) / [CLAUDE.md](CLAUDE.md) | Kit entry for the three tools |
-| [practices/](practices/) | Agnostic practice docs (upstream for `agents/rules`) |
+| [practices/](practices/) | Agnostic practice docs (upstream for `.kpl/agents/rules`) |
 | [templates/](templates/) | Files init copies into targets |
 | [skills/](skills/) | Explore + init + refresh (mirrored to `.cursor` / `.claude` / `.opencode`) |
 | [scripts/sync-tool-skills.ps1](scripts/sync-tool-skills.ps1) | Sync canon skills → tool packs |
 | [scripts/merge-kpl-io-hooks.ps1](scripts/merge-kpl-io-hooks.ps1) / [merge-kpl-io-hooks.sh](scripts/merge-kpl-io-hooks.sh) | Merge token-I/O hooks into Cursor/Claude config |
 | [scripts/test-kpl-io-policy.ps1](scripts/test-kpl-io-policy.ps1) | Allow/deny + merge-safe checks for token I/O |
 | [scripts/test-kpl-refresh.ps1](scripts/test-kpl-refresh.ps1) | Refresh preserve/update checks |
+| [scripts/test-kpl-doctor.ps1](scripts/test-kpl-doctor.ps1) | Doctor PASS/WARN/FAIL checks |
 | [scripts/install.sh](scripts/install.sh) / [install.ps1](scripts/install.ps1) | Install or `-Refresh` / `--refresh` control plane from GitHub / local kit |
+| [scripts/kpl-doctor.sh](scripts/kpl-doctor.sh) / [kpl-doctor.ps1](scripts/kpl-doctor.ps1) | Read-only health check of an installed control plane |
 | [out/](out/) | Explore reports (gitignored contents) |
 
 ---

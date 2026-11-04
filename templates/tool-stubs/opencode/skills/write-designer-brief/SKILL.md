@@ -11,15 +11,15 @@ description: >-
 ## Preconditions
 
 - PRD + relevant specs approved (or user accepts parallel work with noted risk).
-- Template: `specs/_templates/designer-brief.md`; mockups readme: `specs/_templates/mockups/README.md`.
+- Template: `.kpl/specs/_templates/designer-brief.md`; mockups readme: `.kpl/specs/_templates/mockups/README.md`.
 
 ## Steps
 
-1. Create `specs/features/<id>/designer-brief.md`: goal, users, surfaces, flows→AC, screens/states, show/hide, copy, deliverables.
-2. Ensure `specs/features/<id>/mockups/` exists (copy guidance from template README).
+1. Create `.kpl/specs/features/<id>/designer-brief.md`: goal, users, surfaces, flows→AC, screens/states, show/hide, copy, deliverables.
+2. Ensure `.kpl/specs/features/<id>/mockups/` exists (copy guidance from template README).
 3. Tell designer (or user): drop `01-….png` (etc.) into `mockups/`.
 4. Implement UI only after mockups exist **or** user explicitly says follow brief without images.
 
 ## Rules
 
-Follow `agents/rules/designer-mockups.md`. Do not invent a visual system that contradicts project standards.
+Follow `.kpl/agents/rules/designer-mockups.md`. Do not invent a visual system that contradicts project standards.

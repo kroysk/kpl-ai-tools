@@ -11,11 +11,12 @@ description: >-
 ## Preconditions
 
 - Work is on `feature/` | `fix/` | `chore/` (not main).
+- Closed gate PASS from `sdd-quality-gate` (each confirmed AC has `path:line` or test name), **or** user explicitly overrides.
 - API features: security-review done or explicitly deferred by user.
 
 ## Steps
 
-1. Write/update `specs/features/<id>/publish.md` from `specs/_templates/publish.md` (repo, branch, SHA, remote, notes).
+1. Write/update `.kpl/specs/features/<id>/publish.md` from `.kpl/specs/_templates/publish.md` (repo, branch, SHA, remote, notes).
 2. Push the **working branch** only if the user asks; no force; no silent merge to main.
 3. Summarize what was published and any follow-ups (PR link if created when asked).
 

@@ -14,21 +14,23 @@ description: >-
 
 - Specs **ready** (or user override documented).
 - Branch ≠ `main`/`master` — create via `git-branch` first.
-- Read only the current `specs/features/<id>/` files needed + max 1–2 memory cards.
+- Read only the current `.kpl/specs/features/<id>/` files needed + max 1–2 memory cards.
 
 ## Steps
 
 1. Confirm branch and open `tasks.md`.
-2. Climb pragmatic ladder (`agents/rules/pragmatic-ladder.md`) before adding structure.
+2. Climb pragmatic ladder (`.kpl/agents/rules/pragmatic-ladder.md`) before adding structure.
 3. Non-trivial structure → `architecture-mentor` (Teach-on-implement or Decide); paste Architecture note in the reply.
 4. Implement task-by-task; mark `T-*` done/blocked; keep session log short.
 5. Apply STANDARDS / clean-solid; min diff; no unrequested deps.
 6. UI: prefer `mockups/`; if empty, follow designer-brief or ask.
 7. When API-touching T-* all done → `security-review-api` (and front if UI authz).
-8. Optional: `publish-feature`.
+8. When T-* are done (or deferred): stop. Ask for skill `sdd-quality-gate` (Closed). Do **not** mark the feature closed or write Closed PASS in this session.
+9. Only after Closed gate PASS (human approved): optional `publish-feature`.
 
 ## Hard rules
 
 - Never develop on main.
 - Server enforces access; UI hide is not security.
 - Token protocol: don't dump all specs into context. Large product files → skill `bulk-read` (understand); targeted `Read` before you edit.
+- The implement session does not write Closed PASS.

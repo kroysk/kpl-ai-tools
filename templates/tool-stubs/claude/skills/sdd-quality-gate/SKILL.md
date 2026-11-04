@@ -33,10 +33,15 @@ description: >-
 ### → Closed
 
 - [ ] T-* done or explicitly deferred
+- [ ] Each confirmed AC cites evidence: `path:line` or a test name (missing citation → FAIL)
 - [ ] `security-review.md` if API or trust boundary touched
-- [ ] Scope section present; each `confirmed` has evidence `path:line`
+- [ ] Scope section present; each `confirmed` finding has evidence `path:line`
 - [ ] Confirmed critical/high remediated or tasked (`T-*`); `needs_validation` neither silent pass nor automatic fail
 - [ ] `publish.md` optional
+
+## Session rule
+
+Do **not** write Closed PASS in the same session that implemented the feature. Re-read AC and evidence in a fresh gate pass. Human still approves.
 
 ## Output
 

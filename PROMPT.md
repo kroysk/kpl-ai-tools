@@ -19,11 +19,11 @@ Many repos split “orchestration/docs” from “product apps”. The installed
 
 ## Tool packaging
 
-- **Canon:** `agents/skills/<name>/` (full procedures + optional reference files).
+- **Canon:** `.kpl/agents/skills/<name>/` (full procedures + optional reference files).
 - **Native discovery:** identical copies under `.cursor/skills/`, `.claude/skills/`, `.opencode/skills/` after init.
 - **Always-on:** `AGENTS.md` / `CLAUDE.md`; Cursor also gets `.cursor/rules/kpl-core.mdc`.
 - Edit canon → run `scripts/sync-tool-skills.ps1` before init or refresh.
 
 ## After init
 
-Agents enter via `AGENTS.md` / `CLAUDE.md`. Skills load by description from the tool’s skills folder (same content as `agents/skills/`).
+Agents enter via `AGENTS.md` / `CLAUDE.md`. Skills load by description from the tool's skills folder (same content as `.kpl/agents/skills/`).

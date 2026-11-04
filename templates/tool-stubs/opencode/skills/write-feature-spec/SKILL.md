@@ -11,12 +11,12 @@ description: >-
 ## Preconditions
 
 - `prd.md` **approved**.
-- Templates: `specs/_templates/feature-spec.md`, `specs/_templates/tasks.md`.
+- Templates: `.kpl/specs/_templates/feature-spec.md`, `.kpl/specs/_templates/tasks.md`.
 
 ## Steps
 
 1. Read PRD FR/AC and Spec plan.
-2. For each layer in the plan, write `specs/features/<id>/spec-<layer>.md`:
+2. For each layer in the plan, write `.kpl/specs/features/<id>/spec-<layer>.md`:
    - Behavior, AC coverage, happy/error paths, endpoints
    - **Architecture**: boundaries, pattern, tradeoff/not doing
    - Concrete files to touch

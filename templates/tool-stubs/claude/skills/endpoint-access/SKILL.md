@@ -11,7 +11,7 @@ description: >-
 
 ## Rules
 
-Follow `agents/rules/endpoint-access.md`.
+Follow `.kpl/agents/rules/endpoint-access.md`.
 
 Every HTTP endpoint in PRD/specs/contract:
 
@@ -23,7 +23,7 @@ Server **enforces**. Frontend may hide from the same matrix; hide ≠ security.
 ## Steps
 
 1. List new/changed routes for the feature.
-2. Assign access; update PRD/spec Endpoints and `specs/contract/README.md` table if used.
+2. Assign access; update PRD/spec Endpoints and `.kpl/specs/contract/README.md` table if used.
 3. Confirm implementation checks authz where data lives.
 4. If permission codes unknown: ask user or document gap — never leave TBD silently.
 

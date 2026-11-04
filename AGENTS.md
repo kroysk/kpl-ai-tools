@@ -21,7 +21,7 @@ This repository is the **portable SDD/AI workflow kit**, not a product app.
 ## Do not
 
 - Treat this kit as a product control plane (no `specs/features` cycle here unless you deliberately init another target)
-- Edit only one tool’s skill copy — edit `templates/agents/skills/` then run `scripts/sync-tool-skills.ps1`; for kit skills edit `skills/` and mirror to the three tool folders
+- Edit only one tool's skill copy — edit `templates/.kpl/agents/skills/` then run `scripts/sync-tool-skills.ps1`; for kit skills edit `skills/` and mirror to the three tool folders
 
 ## After init on a target
 
